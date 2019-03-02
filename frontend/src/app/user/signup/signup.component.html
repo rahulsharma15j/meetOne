@@ -1,0 +1,73 @@
+<div class="form-div">
+   <div class="heading"><h5>Create an account<hr></h5></div>
+   <form #signUpForm="ngForm" (ngSubmit)="onSubmit(signUpForm)">
+     <div class="form-group">
+         <div class="row">
+            <div class="divide">
+                <label for="firstname">Firstname</label>
+                <input type="text" id="inputFirstName" class="form-control form-control-sm name-box"  #first="ngModel" [(ngModel)]="firstName" pattern="[a-zA-Z][a-zA-Z]+" placeholder="Enter first name.." name="first" required>
+                <span *ngIf="first?.touched" class="box-alert">
+                    <span *ngIf="first.errors?.required">Firstname is required!</span>
+                    <span *ngIf="first.errors?.pattern">Firstname is invalid!</span>
+                </span>
+            </div>
+            <div class="divide">
+                <label for="lastname">Lastname</label>
+                <input type="text" id="inputLastName" class="form-control form-control-sm name-box" #last="ngModel" [(ngModel)]="lastName" pattern="[a-zA-Z][a-zA-Z]+" placeholder="Enter last name.." name="last" required>
+                <span *ngIf="last?.touched" class="box-alert">
+                    <span *ngIf="last.errors?.required">Firstname is required!</span>
+                    <span *ngIf="last.errors?.pattern">Firstname is invalid!</span>
+                </span>
+            </div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="inputEmail" class="form-control form-control-sm" #Email="ngModel" [(ngModel)]="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" placeholder="Enter your email.." name="email" required>
+        <span *ngIf="Email?.touched" class="box-alert">
+            <span *ngIf="Email.errors?.required">Email is required!</span>
+            <span *ngIf="Email.errors?.pattern">Email is invalid!</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="inputUsername" class="form-control form-control-sm" #Username="ngModel" [(ngModel)]="userName" pattern="^[a-zA-Z0-9\-\@\_]+$" placeholder="Enter username.." name="username" required>
+        <span *ngIf="Username?.touched" class="box-alert">
+            <span *ngIf="Username.errors?.required">Username is required!</span>
+            <span *ngIf="Username.errors?.pattern">Only letters,numbers and ( - , @ , _ ) is allowed!</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label for="mobile">Mobile No.</label>
+        <div class="row">
+           <div class="mobile-input">
+           <select class="select-country form-control-sm" (change)="selectCountry($event.target.value)">
+              <option *ngFor="let country of countriesList" [value]="country?.callingCode">{{country?.countryName}}</option>
+           </select>
+          </div>
+           <div class="mobile-input-box">
+                <input type="text" id="inputMobile" class="form-control form-control-sm" #Mobile="ngModel" [(ngModel)]="mobile" maxlength="10" minlength="10" pattern="^[0][0-9]\d{9}$|^[7-9]\d{9}$" placeholder="Enter mobile no.." name="mobile" required>
+                <label for="mobile">{{countryCallingCode}}</label>
+            </div>
+        </div>
+        <span *ngIf="Mobile?.touched" class="box-alert">
+            <span *ngIf="Mobile.errors?.required">Mobile no is required!</span>
+            <span *ngIf="Mobile.errors?.pattern || Mobile.errors?.minlength">Mobile no is invalid!</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" id="inputPassword" class="form-control form-control-sm" #Password="ngModel" [(ngModel)]="password" pattern="^.{8,15}$" placeholder="Enter password.." name="password" required>
+        <span *ngIf="Password?.touched" class="box-alert">
+            <span *ngIf="Password.errors?.required">Password is required!</span>
+            <span *ngIf="Password.errors?.pattern || Password.errors?.minlength">Password must between 8 to 15 character long!</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <button class="btn  btn-block custom-btn btn-sm" *ngIf="!isProcessing"  type="submit" [disabled]="!signUpForm.form.valid">SignUp</button>
+        <div class="spinner-border loader text-danger" *ngIf="isProcessing" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+   </form>
+</div>

@@ -1,0 +1,136 @@
+.form-div{
+    margin-left: 6%;
+    margin-right: 8%;
+    width: 90%;
+     
+}
+
+  
+
+h5{
+    text-align: center;
+    
+}
+ 
+hr{
+    border-color: aquamarine;
+    border-width: 2px;
+    margin-top: 2%;
+    margin-bottom: 0;
+}
+
+label{
+    font-size: 13px;
+    padding: 0%;
+    margin-bottom: 0;
+}
+
+.name-box{
+    width: 100%;
+}
+
+.divide{
+    margin-left: 3.5%; 
+    width: 44.5%;
+}
+
+ 
+.mobile-input{
+    width: 25%;
+    margin-left: 3.5%; 
+}
+
+select{
+    width:100%;
+    height: 31px;
+    border-color: aquamarine;
+    border-width: 2px;
+    margin-right: 0%;
+}
+
+ 
+.mobile-input-box{
+    margin-left: 2%;
+    width: 65.5%;
+    position:relative;
+    overflow:hidden;
+
+}
+
+.mobile-input-box input{
+    position:relative;
+    box-shadow:none;
+    padding-left:50px;
+}
+
+.mobile-input-box label{
+    position:absolute;
+    left:0;
+    height:34px;
+    margin-top:2px;
+    margin-left: 2px;
+    padding:0px 5px;
+    padding-top: 7px;
+    border-radius:0.5rem;
+    line-height:20px;
+    font-size:15px;
+    color:black;
+    top:0;
+    width:20px;
+    font-weight:200;
+}
+
+.country-select{
+    width: 25%;
+}
+
+input{
+    border-color: aquamarine;
+    border-width: 2px;
+}
+
+button{
+   cursor: pointer;
+   
+}
+
+.box-alert{
+    color:red;
+    font-weight: bold;
+    height: 13px;
+    line-height: 0.75rem;
+    font-size: 0.75rem;
+    margin-top: 1px;
+    position: absolute;
+}
+
+ 
+.custom-btn {
+    margin-top: 4%;
+	background-color: rgb(5, 170, 5);
+    border-color:rgb(5, 170, 5);
+    color:white;
+}
+
+.loader {
+    margin-left: 45%;
+}
+
+ 
+.form-group{
+    margin-top: 5px;
+    margin-bottom:0;
+    padding:0;
+}
+
+ 
+.form-control:focus {
+    border-color: aquamarine;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+
+
+ 

@@ -1,0 +1,15 @@
+.parent{
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    height: 30vh;
+    width: 80%;
+    text-align: center;
+    background-color: azure;
+    position: absolute;
+}
+
+.parent,h1{
+    padding: 10px;
+}
+ 
