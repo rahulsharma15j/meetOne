@@ -29,15 +29,33 @@ label{
     width: 100%;
 }
 
-.divide{
-    margin-left: 3.5%; 
-    width: 44.5%;
+.part-1{
+      
+    width: 47.5%;
 }
 
- 
+.part-2{
+    margin-left: 5% !important;  
+    width: 47.5%;
+}
+
+.row,.code{
+    margin:inherit !important;
+     
+    display: inline-block; 
+} 
+.code{
+    width: 35% !important;
+}
+
+.row,.mobile-input{
+   
+    display: inline-block;
+}
 .mobile-input{
-    width: 25%;
-    margin-left: 3.5%; 
+    width: 62% !important; 
+    margin-left: 2.5%;
+    
 }
 
 select{
@@ -123,6 +141,11 @@ button{
     padding:0;
 }
 
+.row,.part-1,.part-2{
+    margin:inherit;
+    display: inline-block;
+}
+
  
 .form-control:focus {
     border-color: aquamarine;
@@ -131,6 +154,20 @@ button{
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
+@media screen and (min-height:663px){
+   
+    .name-box{
+        width: 100%;
+    }
+    .code{
+        width: 25%;
+        margin-left: 6.5%; 
+    }
+    .mobile-input{
+        width: 60%;
+        margin-left: 2.5%; 
+    }
+}
 
 
  

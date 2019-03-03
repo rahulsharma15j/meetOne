@@ -6,11 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'rndsdsdsd';
-  public hi;
-
-  public fun(){
-    console.log(this.hi);
-  }
 
 }
