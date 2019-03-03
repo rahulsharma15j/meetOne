@@ -61,6 +61,7 @@ export class SignupComponent implements OnInit {
 
   public createUser():any{
     if(!this.firstName){
+      console.log('hi');
       this.toastr.warning('PLEASE ENTER FIRST NAME');
     }else if(!this.lastName){
       this.toastr.warning('PLEASE ENTER LAST NAME');
