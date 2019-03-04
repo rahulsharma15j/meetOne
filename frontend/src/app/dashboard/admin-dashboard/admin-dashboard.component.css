@@ -1,0 +1,134 @@
+.parent-div{
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-color: rgb(214, 214, 214);
+}
+ 
+.calender{
+    height: 90%;
+    width: 97%;
+    position: absolute;
+    margin-left: 1.5%;  
+    margin-top: 2%;
+    margin-bottom: 1%;
+    background-color: white;
+}
+ 
+
+.navbar{
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.row{
+    margin-top: 0%;
+    margin-left: 2%;
+    margin-bottom: 2%;
+    width:100%;
+     
+}
+ 
+.title{
+    font-family: 'Source Sans Pro',sans-serif;
+    position: absolute;
+    top:50%;
+    left:28%;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color:mintcream;
+   
+}
+
+.modal-body{
+    margin: 0;
+    padding:0;
+}
+.router-div{
+    padding-left: 0%;
+    padding-right: 0%;
+    margin:0;
+    width: 45%;
+    
+}
+
+ 
+
+.close {
+    outline: 0 !important; 
+    opacity: 1;
+    right: -10px;
+}
+
+
+.modal-header{
+    margin-top: 0;
+    border-bottom: 0 none;
+    padding:0;
+}
+
+.line {
+    border-left: 3px solid green;
+    height: 400px;
+    margin-left: 2.5%;
+  }
+
+.navbar-brand{
+    margin-left: 3%;
+}
+
+ul{
+    margin-right: 3%;
+}
+
+nav .navbar-nav li a{
+    color: white !important;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+footer{
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 12px;
+  background-color:  #212529;
+
+} 
+
+@media screen and (min-height:992px){
+    .modal-lg{
+        max-width: 80% !important; 
+    }
+}
+
+@media screen and (max-width:600px){
+    .modal{
+        margin-top: 5%;
+    }
+    .modal-lg{
+        width: 80% ; 
+        margin-left: 10%;
+    }
+    .router-div{
+        width: 100% !important;
+        padding-right: 5%;
+    }
+    .line {
+        border: 2px solid green;
+        height: 2px;
+        margin-left: 3.5%;
+        margin-top: 2.5%;
+        margin-bottom: 3.5%;
+        width: 90%;
+      }
+}
+
+ 
+
+ 
+
+ 
+ 
