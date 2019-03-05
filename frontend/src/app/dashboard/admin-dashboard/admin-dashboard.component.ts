@@ -1,28 +1,8 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-  OnInit
-} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import { Component,ChangeDetectionStrategy,ViewChild,TemplateRef,OnInit  } from '@angular/core';
+import { startOfDay,endOfDay,subDays,addDays,endOfMonth,isSameDay,isSameMonth,addHours } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView
-} from 'angular-calendar';
+import { CalendarEvent,CalendarEventAction,CalendarEventTimesChangedEvent,CalendarView } from 'angular-calendar';
 
 const colors: any = {
   red: {
@@ -46,7 +26,27 @@ const colors: any = {
 })
 export class AdminDashboardComponent implements OnInit {
 
-  
+  public userList : any[] = [
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma',
+    'rahul sharma','rahul sharma',
+    'rahul sharma',
+
+    'rahul sharma',
+    'rahul sharma']
+
+     
+
 
   ngOnInit() {
   }

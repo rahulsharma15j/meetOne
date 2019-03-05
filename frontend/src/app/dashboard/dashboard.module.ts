@@ -7,6 +7,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [AdminDashboardComponent, UserDashboardComponent],
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     NgbModalModule,
     FormsModule,
+    SharedModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

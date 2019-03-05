@@ -1,49 +1,8 @@
-<body>
-  <nav class="navbar navbar-expand-sm bg-info navbar-dark">
-      <a class="navbar-brand" href="" (click)='onClickOnLink($event)'><h3>MeetOne</h3></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navItems">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navItems">
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' data-toggle="modal" data-target="#exampleModalCenter">Home</a></li>
-              </ul>
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' data-toggle="modal" data-target="#exampleModalCenter">Notification</a></li>
-              </ul>
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' data-toggle="modal" data-target="#exampleModalCenter">Admin name</a></li>
-              </ul>
-          </div>
-  </nav>
+<app-nav></app-nav>
 <div class="parent-div">
-   
+   <div class="row my-row">
    <div class="calender-div">
-        <!--<ng-template #modalContent let-close="close">
-                <div class="modal-header">
-                  <h5 class="modal-title">Event action occurred</h5>
-                  <button type="button" class="close" (click)="close()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div>
-                    Action:
-                    <pre>{{ modalData?.action }}</pre>
-                  </div>
-                  <div>
-                    Event:
-                    <pre>{{ modalData?.event | json }}</pre>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" (click)="close()">
-                    OK
-                  </button>
-                </div>
-              </ng-template>-->
-            
-              <div class="row text-center">
+       <div class="row text-center">
                 <div class="col-md-4">
                   <div class="btn-group">
                     <div
@@ -104,8 +63,8 @@
               </div>
               <br />
               <div class="view">
-              <div [ngSwitch]="view">
-                <mwl-calendar-month-view
+              <div [ngSwitch]="view" id="month">
+                <mwl-calendar-month-view  
                   *ngSwitchCase="CalendarView.Month"
                   [viewDate]="viewDate"
                   [events]="events"
@@ -136,14 +95,76 @@
                 </mwl-calendar-day-view>
               </div>
             </div>
-     </div>
 
-     <div class="user-list">
+          
+        </div><!--end row-->
+        <div class="user-list">
           <h5>Users List</h5>
+          <div class="list">
+             Rahul sharma
+          </div>
+          <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+              Rahul sharma
+           </div>
+           <div class="list">
+            Rahul sharma
+         </div>
+         <div class="list">
+          Rahul sharma
+       </div>
+       <div class="list">
+        Rahul sharma
      </div>
-   
+     <div class="list">
+      Rahul sharma
+   </div>
+   <div class="list">
+    Rahul sharma
+ </div>
+ <div class="list">
+  Rahul sharma
+</div><div class="list">
+  Rahul sharma
 </div>
-<footer class="bg-info navbar-dark">
-  Copyright @ Rahul Sharma
-</footer>
-</body>
+<div class="list">
+  Rahul sharma
+</div>
+<div class="list">
+  Rahul sharma
+</div>
+<div class="list">
+  Rahul sharma
+</div>
+<div class="list">
+  Rahul sharma
+</div>
+</div>
+</div><!--div ends-->
+
+</div>
+
+ 

@@ -25,7 +25,7 @@ export class SignupComponent implements OnInit {
    
   constructor( 
     private toastr:ToastrService,
-    public appService:AppService) { }
+    public appService:AppService) { console.log('signup called')}
 
   ngOnInit() {
     this.getCountryPhones();

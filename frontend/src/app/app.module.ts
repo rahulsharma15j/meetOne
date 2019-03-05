@@ -8,10 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { InternalErrorComponent } from './internal-error/internal-error.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent,
+    InternalErrorComponent
   ],
   imports: [
     BrowserModule,
