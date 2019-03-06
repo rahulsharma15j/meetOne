@@ -21,10 +21,10 @@ import { InternalErrorComponent } from './internal-error/internal-error.componen
     BrowserModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    AppRoutingModule,
-    UserModule,
     HttpClientModule,
-    DashboardModule
+    UserModule,
+    DashboardModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

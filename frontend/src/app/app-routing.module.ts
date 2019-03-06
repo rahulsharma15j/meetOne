@@ -7,7 +7,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { InternalErrorComponent } from './internal-error/internal-error.component';
 
 const routes: Routes = [
-  { path:'/',component:MainComponent},
   { path: 'dashboard/admin',component:AdminDashboardComponent},
   { path: 'dashboard/user',component:UserDashboardComponent},
   { path: 'error',component:InternalErrorComponent},
