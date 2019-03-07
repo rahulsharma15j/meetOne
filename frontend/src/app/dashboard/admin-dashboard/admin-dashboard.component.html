@@ -1,10 +1,74 @@
 <app-nav></app-nav>
 <div class="parent-div">
+  <!--User list for small screen-->
+  <div class="accordion my-accord panel" id="user-list">
+      <div class="card">
+        <div class="card-header user-btn" id="listHeading">
+           <div data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               <h5>Users list</h5>
+           </div>
+        </div>
+    
+        <div id="collapseOne" class="collapse hide" aria-labelledby="listHeading" data-parent="#user-list">
+          <div class="card-body my-card">
+              <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  <!--user list ends-->
    <div class="row my-row">
    <div class="calender-div">
      <!--nav-->
        <div class="row text-center cal">
-          <div class="col-md-4">
+          <div class="col-md-3">
+              <h3 id="date">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+            </div> 
+          <div class="col-md-3 cal-item">
               <div class="btn-group btn-group-sm">
                 <div
                   class="btn btn-primary custom-btn"
@@ -29,12 +93,15 @@
                 </div>
               </div>
             </div>
-                <div class="col-md-4 ">
-                  <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-                </div>
                 
 
-                <div class="col-md-4">
+                <div class="col-md-3 cal-item">
+                  <div class="btn btn-primary btn-sm custom-btn">
+                    Create new meeting
+                  </div>
+                </div>
+                
+                <div class="col-md-3 cal-item">
                     <div class="btn-group btn-group-sm">
                       <div
                         class="left"
@@ -107,10 +174,9 @@
           <h5>Users List</h5>
           <div class="search ">
             <input class="form-control" type="text" placeholder="Search user.." aria-label="search">
-          </div>
-          <div class="list">
-             Rahul sharma
-          </div>
+          </div >
+           
+          <div class="border-list">
           <div class="list">
               Rahul sharma
            </div>
@@ -169,6 +235,7 @@
 </div>
 <div class="list">
   Rahul sharma
+</div>
 </div>
 </div>
 </div><!--div ends-->
