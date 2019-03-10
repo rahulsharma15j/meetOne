@@ -3,6 +3,8 @@ import { startOfDay,endOfDay,subDays,addDays,endOfMonth,isSameDay,isSameMonth,ad
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent,CalendarEventAction,CalendarEventTimesChangedEvent,CalendarView } from 'angular-calendar';
+import { Router } from '@angular/router';
+import { PARAMETERS } from '@angular/core/src/util/decorators';
 
 const colors: any = {
   red: {
@@ -25,6 +27,8 @@ const colors: any = {
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+
+  
 
   public userList : any[] = [
     'rahul sharma',
@@ -125,7 +129,11 @@ export class AdminDashboardComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal) {}
+  constructor(private modal: NgbModal,private router: Router) {
+    console.log('admin called.');
+  }
+
+ 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
