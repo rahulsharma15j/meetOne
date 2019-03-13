@@ -6,17 +6,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navItems">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' data-toggle="modal" data-target="#exampleModalCenter">LogIn/SignUp</a></li>
+                    <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' #closeModal  *ngIf="!signupSuccess" data-toggle="modal" data-target="#exampleModalCenter">LogIn/SignUp</a></li>
                 </ul>
             </div>
     </nav>
-<div class="parent-div">
+<div class="parent-div" *ngIf="!signupSuccess">
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close pull-right" (click)='onClick()' data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close pull-right" (click)='onClick()' #closeModal data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button> 
         </div>
@@ -37,5 +37,23 @@
     </div>
   </div><!--modal ends-->
 </div>
+
+<div class="info" *ngIf="signupSuccess">
+    <div class="banner">
+        <h3>Welcome to meetOne!</h3>
+        <h6>your account has been created.</h6>
+        <h6>Verification mail has been sent to your email Id,<br>Please check your email inbox.</h6>
+        <button type="button" class="btn btn-success" (click)="onClickOnHome()">Home</button>
+    </div>
+</div>
+
+<div class="info" *ngIf="recovery">
+    <div class="banner">
+        <h4>Recovery mail sent successfully</h4>
+        <h6>Please check your email inbox and set your  password</h6>
+        <button type="button" class="btn btn-success" (click)="onClickOnHome()">Home</button>
+    </div>
+</div>
+ 
  
 </body>

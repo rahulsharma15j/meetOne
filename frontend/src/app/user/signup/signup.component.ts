@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/services/app.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +24,7 @@ export class SignupComponent implements OnInit {
    
    
    
-  constructor( 
+  constructor(public router:Router,
     private toastr:ToastrService,
     public appService:AppService) { console.log('signup called')}
 
@@ -43,6 +44,7 @@ export class SignupComponent implements OnInit {
 
   public createCountryList():any{
     this.appService.getCountryNames().subscribe((response)=>{
+      console.log(response);
       Object.keys(response).forEach((key)=>{
            this.countriesList.push({
              name: response[key],
@@ -75,13 +77,14 @@ export class SignupComponent implements OnInit {
       this.toastr.warning('PLEASE SELECT COUNTRY NAME');
     }else if(!this.password){
       this.toastr.warning('PLEASE ENTER YOUR PASSWORD');
-    }else if(this.appService.validateEmail(this.email)){
+    }else if(!this.appService.validateEmail(this.email)){
       this.toastr.warning('ENTERED EMAIL IS INVALID');
-    }else if(this.appService.validateUserName(this.userName)){
+    }else if(!this.appService.validateUserName(this.userName)){
       this.toastr.warning('USER NAME LENGTH 6 REQUIRED');
-    }else if(this.appService.validatePassword(this.password)){
+    }else if(!this.appService.validatePassword(this.password)){
       this.toastr.warning('PASSWORD LENGTH 8 REQUIRED');
     }else{
+      this.isProcessing = true;
       let newUserObj = {
         firstName:this.firstName,
         lastName:this.lastName,
@@ -91,10 +94,14 @@ export class SignupComponent implements OnInit {
         mobile: this.countryCode + this.mobile,
         password:this.password
       }
+      console.log(newUserObj);
       this.appService.signUp(newUserObj).subscribe((response)=>{
          if(response.status === 200){
+           
            this.toastr.success('Please check your email','SUCCESS');
-         }else{
+           this.modalClose();
+         
+          }else{
           this.toastr.warning(`${response.message}`,'ERROR');
          }
       },(err)=>{
@@ -103,5 +110,10 @@ export class SignupComponent implements OnInit {
     }
   }
  
+
+  public modalClose():any{
+    console.log('modal close called.');
+    this.appService.popup.next('close');
+  }
   
 }

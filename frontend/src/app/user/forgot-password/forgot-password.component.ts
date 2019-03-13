@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/services/app.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -10,7 +11,8 @@ import { AppService } from 'src/app/services/app.service';
 export class ForgotPasswordComponent implements OnInit {
   public email:any;
   constructor( private toastr:ToastrService,
-    public appService:AppService,) { }
+    public appService:AppService,
+    public router:Router) { }
 
   ngOnInit() {
   }
@@ -26,10 +28,17 @@ export class ForgotPasswordComponent implements OnInit {
       }
       this.appService.resetPassword(reset).subscribe((response)=>{
          if(response.status === 200){
-           this.toastr.success(`${response.message}`);
+           this.toastr.success('PASSWORD RECOVERY EMAIL SENT');
+         }else{
+          this.toastr.warning(`${response.message}`);
          }
       },(err)=>{
-        this.toastr.error('Some error occurred','ERROR');
+        if(err.status === 404){
+          this.toastr.error('EMAIL IS NOT REGISTERED WITH US');
+        }else{
+          this.toastr.error('INTERNAL SERVER ERROR');
+          this.router.navigate(['/error']);
+        }
       });
     }
   }

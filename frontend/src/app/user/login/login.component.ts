@@ -24,23 +24,26 @@ export class LoginComponent implements OnInit {
   public logInUser():any{
     let user = {};
     if(!this.email){
-      this.toastr.warning('PLEASE ENTER YOUR EMAIL ');
-    }else if(!this.userName){
-      this.toastr.warning('PLEASE ENTER USER NAME');
+      this.toastr.warning('PLEASE ENTER YOUR EMAIL OR USERNAME');
     }else if(!this.password){
       this.toastr.warning('PLEASE ENTER YOUR PASSWORD');
-    }else if(this.appService.validateEmail(this.email)){
-       user['email'] = this.email;
-    }else if(this.appService.validateUserName(this.userName)){
-      user['userName'] = this.userName;
-    }else if(this.appService.validatePassword(this.password)){
+    }else if(!this.appService.validatePassword(this.password)){
       this.toastr.warning('PASSWORD LENGTH 8 REQUIRED');
     }else{
+      
+      (this.appService.validateEmail(this.email))?user['email'] = this.email:user['userName']=this.email;
       user['password'] = this.password;
+      
       this.appService.logIn(user).subscribe((response)=>{
-          if(response.status === 200){
+         if(response.status === 200){
+             this.modalClose();
              this.toastr.success('Login successfull.','Welcome');
-             this.router.navigate([]);
+             if(response.data.userDetails.userType === 'admin'){
+              this.router.navigate(['/dashboard/admin']);
+             }else{
+              this.router.navigate(['/dashboard/user']);
+             }
+            
           }else{
             this.toastr.error(`${response.message}`,'ERROR');
           }
@@ -49,6 +52,11 @@ export class LoginComponent implements OnInit {
           this.toastr.error('Some error occurred.','ERROR');
       });
     }
+  }
+
+  public modalClose():any{
+    console.log('modal close called.');
+    this.appService.popup.next('close');
   }
    
 

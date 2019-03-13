@@ -9,22 +9,25 @@ import { ToastrModule } from 'ngx-toastr';
 import { VerifyUserComponent } from './verify-user/verify-user.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { SharedModule } from '../shared/shared.module';
+ 
 
 @NgModule({
-  declarations: [SignupComponent, MainComponent, VerifyUserComponent, LoginComponent, ForgotPasswordComponent],
+  declarations: [SignupComponent, MainComponent, VerifyUserComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    SharedModule,
     RouterModule.forChild([
       {path:'',component:MainComponent,
       children:[
         {path:'',outlet:'signup',component:SignupComponent},
         {path:'',component:LoginComponent},
-        {path:'forgot',component:ForgotPasswordComponent}
-      ]
-    }])
+        {path:'forgot',component:ForgotPasswordComponent}]},
+      ])
   ]
    
    

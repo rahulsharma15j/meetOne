@@ -4,15 +4,15 @@ import { AdminDashboardComponent } from './dashboard/admin-dashboard/admin-dashb
 import { UserDashboardComponent } from './dashboard/user-dashboard/user-dashboard.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { InternalErrorComponent } from './internal-error/internal-error.component';
-import { CreateMeetingComponent } from './dashboard/create-meeting/create-meeting.component';
-import { UpdateMeetingComponent } from './dashboard/update-meeting/update-meeting.component';
+import { VerifyUserComponent } from './user/verify-user/verify-user.component';
+import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
  
-
 const routes: Routes = [
   { path: 'dashboard/admin',component:AdminDashboardComponent},
   { path: 'dashboard/user',component:UserDashboardComponent},
-  { path: 'meeting/create',component:CreateMeetingComponent},
-  { path: 'meeting/update',component:UpdateMeetingComponent},
+  { path: 'verify/:userId', component:VerifyUserComponent},
+  { path: 'reset-password',component:ResetPasswordComponent},
+  
   { path: 'error',component:InternalErrorComponent},
   { path: '',redirectTo:'/',pathMatch:'full' },
   { path: '*', component:NotFoundComponent },

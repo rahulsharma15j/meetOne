@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
-  private baseUrl : string = "http://localhost:3000/api/v1";
+  public baseUrl : string = "http://localhost:3000/api/v1";
+  public popup: Subject<any> = new Subject<any>();
 
   public passwordRegex = /^[A-Za-z0-9]\w{7,}$/;
   public userNameRegex = /^[a-zA-Z0-9\@\-\_]{8,}$/;
@@ -35,9 +36,9 @@ export class AppService {
    */
   public logIn(data): Observable<any>{
     const params = new HttpParams()
-      .set('email', data.email)
-      .set('password', data.password)
-      return this.http.post(`${this.baseUrl}/users/login`, params);
+    .set((data.email)?'email':'userName',(data.email)?data.email:data.userName)
+    .set('password',data.password);
+    return this.http.post(`${this.baseUrl}/users/login`, params);
   } 
 
   /**
@@ -56,7 +57,7 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/users/signup`, params);
   }
 
-  
+   
  
   /**
    * To reset password.

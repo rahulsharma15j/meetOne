@@ -1,0 +1,21 @@
+.navbar{
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.navbar-brand{
+    margin-left: 3%;
+}
+
+ul{
+    margin-right: 3%;
+}
+
+nav .navbar-nav li a{
+    color: white !important;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
