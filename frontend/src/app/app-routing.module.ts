@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'dashboard/admin',component:AdminDashboardComponent},
   { path: 'dashboard/user',component:UserDashboardComponent},
   { path: 'verify/:userId', component:VerifyUserComponent},
-  { path: 'reset-password',component:ResetPasswordComponent},
+  { path: 'reset-password/:resetToken',component:ResetPasswordComponent},
   
   { path: 'error',component:InternalErrorComponent},
   { path: '',redirectTo:'/',pathMatch:'full' },

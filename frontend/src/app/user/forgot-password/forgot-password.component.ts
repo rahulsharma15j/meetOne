@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class ForgotPasswordComponent implements OnInit {
   public email:any;
+  public isProcessing: boolean = false;
   constructor( private toastr:ToastrService,
     public appService:AppService,
     public router:Router) { }
@@ -17,29 +18,40 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit() {
   }
 
-  public sendResetEmail():any{
+  public sendRecoveryEmail():any{
     if(!this.email){
       this.toastr.warning('PLEASE ENTER YOUR EMAIL ');
-    }else if(this.appService.validateEmail(this.email)){
-      this.toastr.warning('ENTERED EMAIL IS INVALID');
+    }else if(!this.appService.validateEmail(this.email)){
+      this.toastr.warning('PLEASE ENTER VALID EMAIL');
     }else{
+      this.isProcessing = true;
       let reset = {
         email: this.email
       }
       this.appService.resetPassword(reset).subscribe((response)=>{
          if(response.status === 200){
            this.toastr.success('PASSWORD RECOVERY EMAIL SENT');
+           this.modalClose();
          }else{
-          this.toastr.warning(`${response.message}`);
-         }
+          this.toastr.error(`${response.message}`);
+          this.isProcessing = false;
+        }
       },(err)=>{
         if(err.status === 404){
-          this.toastr.error('EMAIL IS NOT REGISTERED WITH US');
+          this.toastr.warning('EMAIL IS NOT REGISTERED WITH US');
+          this.isProcessing = false;
         }else{
           this.toastr.error('INTERNAL SERVER ERROR');
           this.router.navigate(['/error']);
         }
       });
     }
+  }
+
+
+
+  public modalClose():any{
+    console.log('modal close called.');
+    this.appService.popup.next('close2');
   }
 }

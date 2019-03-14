@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/services/app.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,32 +10,40 @@ import { Router } from '@angular/router';
 })
 export class ResetPasswordComponent implements OnInit {
   public password:any;
-  public confirmPassword:any;
+  public confirm:any;
+  public resetToken:any;
    
 
   constructor(private toastr:ToastrService,
     public appService:AppService,
-    private router:Router) { }
+    private router:Router,
+    public route:ActivatedRoute) { }
 
   ngOnInit() {
+    this.resetToken = this.route.snapshot.paramMap.get('resetToken');
   }
 
   public resetUserPassword():any{
-     
-    if(!this.password === this.confirmPassword){
+    if(!this.password){
+      this.toastr.warning('PASSWORD RQUIRED');
+    }else if(!this.confirm){
+      this.toastr.warning('CONFIRM PASSWORD REQUIRED');
+    }else if(this.password !== this.confirm){
       this.toastr.warning('PASSWORD DOES NOT MATCHES');
     }else if(!this.appService.validatePassword(this.password) || 
-              !this.appService.validatePassword(this.confirmPassword)){
+              !this.appService.validatePassword(this.confirm)){
       this.toastr.warning('PASSWORD LENGTH 8 REQUIRED');
     }else{
-      let newPassword = {
+      let password = {
         password: this.password,
-        confirm: this.confirmPassword
+        confirm: this.confirm,
+        resetToken: this.resetToken
       }
       
-      this.appService.updatePassword(newPassword).subscribe((response)=>{
+      this.appService.updatePassword(password).subscribe((response)=>{
+        console.log(response);
          if(response.status === 200){
-             this.toastr.success('PASSWORD RESET SUCCESSFULL');
+             this.toastr.success('PASSWORD UPDATED SUCCESSFULL');
           }else{
             this.toastr.warning(`${response.message}`);
           }

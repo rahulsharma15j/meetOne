@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/services/app.service';
 import { Router } from '@angular/router';
+import { Cookie } from 'ng2-cookies';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ export class LoginComponent implements OnInit {
   public email:any;
   public userName:any;
   public password:any;
+  fullName: string;
 
   constructor( 
     private toastr:ToastrService,
@@ -19,6 +21,7 @@ export class LoginComponent implements OnInit {
     private router:Router) { console.log('login called')}
 
   ngOnInit() {
+    
   }
   
   public logInUser():any{
@@ -38,6 +41,12 @@ export class LoginComponent implements OnInit {
          if(response.status === 200){
              this.modalClose();
              this.toastr.success('Login successfull.','Welcome');
+             this.fullName = `${response.data.userDetails.firstName} ${response.data.userDetails.lastName}`
+             this.appService.setUserInfoInLocalStorage(response.data.userDetails);
+             Cookie.set('receiverId',response.data.userDetails.userId);
+             Cookie.set('receiverName',this.fullName);
+             Cookie.set('authToken',response.data.authToken);
+             
              if(response.data.userDetails.userType === 'admin'){
               this.router.navigate(['/dashboard/admin']);
              }else{

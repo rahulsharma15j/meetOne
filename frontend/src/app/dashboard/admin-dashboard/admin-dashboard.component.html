@@ -1,3 +1,105 @@
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Meeting Details</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="parent">
+          <div class="form">
+              <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-4 col-form-label">Subject:</label>
+                    <div class="col-sm-6">Meeting Subject.               
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Description:</label>
+                    <div class="col-sm-6">Meeting Description.</div>
+                  </div>
+                  <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">StartTime:</label>
+                        <div class="col-sm-6">11:00</div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="inputEmail3" class="col-sm-2 col-form-label">EndTime:</label>
+                          <div class="col-sm-6">12:00</div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Location:</label>
+                            <div class="col-sm-6">Agra</div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="inputEmail3" class="col-sm-2 col-form-label">Meeting Scheduled by:</label>
+                              <div class="col-sm-6">Rahul Sharma</div>
+                            </div>
+                          </div>
+        </div> 
+  </div>
+  <!-------------------------------------------------------->
+  
+</ng-template>
+
+<!--Modal alert-->
+<ng-template #modalReminder let-close="close">
+    <div class="modal-header">
+      <h6 class="modal-title">Meeting Reminder</h6>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h6 class="card-title">Hurry Up!! Your meeting <span><i> {{modalData?.event.meetingTopic}} </i></span> is about to start.</h6>
+    </div>
+  
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-success" (click)="modalData?.event.remindMe=true;gentleReminder=true;close()">Snooze</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="modalData?.event.remindMe=false;gentleReminder=true;close()">Dismiss</button>
+    </div>
+  </ng-template>
+
+  <!--modal-->
+  <ng-template #modalDeleteMeeting let-close="close">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Meeting</h5>
+        <button type="button" class="close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6 class="card-title">Are you sure you want to delete the following meeting?</h6>
+        <h4 class="card-title">{{modalData?.event.meetingTopic}}</h4>
+      </div>
+    
+      <div class="modal-footer">
+        <button type="button" class="btn btn btn-danger" (click)="deleteEvent(modalData?.event);close()">Delete</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Cancel</button>
+      </div>
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!------------------------------------------------------------------------------------------>
 <app-nav></app-nav>
 <div class="parent-div">
   <!--User list for small screen-->
@@ -139,39 +241,29 @@
               </div>
               <!--nav-->
               
+              
               <div [ngSwitch]="view" id="cal-view">
-                 <mwl-calendar-month-view  
-                  *ngSwitchCase="CalendarView.Month"
+                  <mwl-calendar-month-view
+                  *ngSwitchCase="'month'"
                   [viewDate]="viewDate"
                   [events]="events"
-                  [refresh]="refresh"
-                  [activeDayIsOpen]="activeDayIsOpen"
-                  (dayClicked)="dayClicked($event.day)"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
+                  (dayClicked)="viewDate = $event.day.date; view = 'day'"
                 >
                 </mwl-calendar-month-view>
-                
                 <mwl-calendar-week-view
-                  *ngSwitchCase="CalendarView.Week"
+                  *ngSwitchCase="'week'"
                   [viewDate]="viewDate"
                   [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
+                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
                 >
                 </mwl-calendar-week-view>
-               
                 <mwl-calendar-day-view
-                  *ngSwitchCase="CalendarView.Day"
+                  *ngSwitchCase="'day'"
                   [viewDate]="viewDate"
                   [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
                 >
                 </mwl-calendar-day-view>
-               
+              
               </div>
             
 
@@ -180,71 +272,20 @@
         <div class="user-list">
           <h5>Users List</h5>
           <div class="search ">
-            <input class="form-control" type="text" placeholder="Search user.." aria-label="search">
+            <input class="form-control" type="text" [(ngModel)]="userName" placeholder="Search user.." aria-label="search">
           </div >
            
           <div class="border-list">
-          <div class="list">
-              Rahul sharma
+          <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
+            <a  (click)="getMeetingsOfUser(user.firstName + ' ' + user.lastName,user.userId)">
+              <span>{{user.firstName}} {{user.lastName}}<br>
+               {{user.email}}</span>
+            </a>
+              
+               
            </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-              Rahul sharma
-           </div>
-           <div class="list">
-            Rahul sharma
-         </div>
-         <div class="list">
-          Rahul sharma
-       </div>
-       <div class="list">
-        Rahul sharma
-     </div>
-     <div class="list">
-      Rahul sharma
-   </div>
-   <div class="list">
-    Rahul sharma
- </div>
- <div class="list">
-  Rahul sharma
-</div><div class="list">
-  Rahul sharma
-</div>
-<div class="list">
-  Rahul sharma
-</div>
-<div class="list">
-  Rahul sharma
-</div>
-<div class="list">
-  Rahul sharma
-</div>
-<div class="list">
-  Rahul sharma
-</div>
-</div>
-</div>
+          </div>
+      </div>
 </div><!--div ends-->
 
 </div>
@@ -265,3 +306,6 @@
     </div>
   </div>
 </div> 
+
+
+<!-------------------------------------------------------->

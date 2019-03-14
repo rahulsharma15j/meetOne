@@ -81,9 +81,10 @@ export class AppService {
    */
   public updatePassword(data): Observable<any>{
     const params = new HttpParams()
+      .set('confirm', data.confirm)
       .set('resetToken', data.resetToken)
       .set('password', data.password)
-    return this.http.put(`${this.baseUrl}/users/update`, params);
+    return this.http.put(`${this.baseUrl}/users/update-password`, params);
   } 
   
   
@@ -124,4 +125,10 @@ export class AppService {
     }
     return false;
   }
+
+  public logOut(authToken): Observable<any>{
+    const params = new HttpParams()
+      .set('authToken', authToken)
+    return this.http.post(`${this.baseUrl}/users/logout`, params);
+  } 
 }

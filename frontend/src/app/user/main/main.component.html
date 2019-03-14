@@ -10,7 +10,7 @@
                 </ul>
             </div>
     </nav>
-<div class="parent-div" *ngIf="!signupSuccess">
+<div class="parent-div" *ngIf="isParent">
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<div class="info" *ngIf="recovery">
+<div class="info" *ngIf="recoveryMail">
     <div class="banner">
         <h4>Recovery mail sent successfully</h4>
         <h6>Please check your email inbox and set your  password</h6>
