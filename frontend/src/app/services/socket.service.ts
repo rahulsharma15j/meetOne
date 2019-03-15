@@ -17,6 +17,10 @@ export class SocketService {
     this.socket.emit('set-user',authToken);   
  }
 
+ public sendNotification(data):any{
+  this.socket.emit('notification', data);
+}
+
   public disconnectUser():any{
      this.socket.emit('disconnect','');   
   }

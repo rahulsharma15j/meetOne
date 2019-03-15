@@ -1,0 +1,22 @@
+.parent{
+    width: 100%;
+    height: 100%; 
+    
+ }
+
+ .form{
+    width: 90%;
+    margin-top:2%;
+    margin-left: 5%; 
+    margin-right: 5%; 
+    margin-bottom: 5%;
+}
+
+ 
+
+.custom-btn {
+   color:white;
+   border-radius: 17px;
+   width: 25%;
+   margin-left:37.5%;
+}

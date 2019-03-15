@@ -1,43 +1,20 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-  OnInit
-} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import { Component,ChangeDetectionStrategy,ViewChild,TemplateRef,OnInit } from '@angular/core';
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { SocketService } from 'src/app/services/socket.service';
+import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView
-} from 'angular-calendar';
+import { AppService } from 'src/app/services/app.service';
+import { MeetingService } from 'src/app/services/meeting.service';
+import { Cookie } from 'ng2-cookies';
+import { Router } from '@angular/router';
 
 const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
-  },
-  blue: {
+   blue: {
     primary: '#1e90ff',
     secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  }
-};
+  }};
 
 @Component({
   selector: 'app-user-dashboard',
@@ -46,17 +23,12 @@ const colors: any = {
 })
 export class UserDashboardComponent implements OnInit {
 
-  ngOnInit() {
-  }
-
+  //Functions and properties related to calendar view starts here.
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
-
   view: CalendarView = CalendarView.Month;
-
   CalendarView = CalendarView;
-
   viewDate: Date = new Date();
-
+  
   modalData: {
     action: string;
     event: CalendarEvent;
@@ -80,52 +52,10 @@ export class UserDashboardComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-  ];
+  events: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
-
-  constructor(private modal: NgbModal) {}
   
-
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
@@ -140,10 +70,7 @@ export class UserDashboardComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
+  eventTimesChanged({event, newStart, newEnd
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
@@ -156,19 +83,118 @@ export class UserDashboardComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(): void {
-    this.events.push({
-      title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
-    });
-    this.refresh.next();
+   
+//Functions and properties related to calendar ends here.
+
+
+
+
+//Function and properties related to user starts here.
+public authToken: any;
+public allMeetings: any;
+public receiverId: any;
+public receiverName: any;
+   
+constructor(private modal: NgbModal,
+  public socketService:SocketService,
+  private toastr:ToastrService,
+  public appService:AppService,
+  public meetingService:MeetingService,
+  public router:Router) {}
+
+
+  ngOnInit() {
+    this.receiverId = Cookie.get('receiverId');
+    this.receiverName = Cookie.get('receiverName');
+    this.authToken = Cookie.get('authToken');
+    this.verifyUserUsingSocket();
+    this.getMeetingsOfUser(this.receiverName,this.receiverId);
+    this.handleSocketAuthError();
   }
+//User utility functions starts.
+/**
+ * function to log out user.
+ */
+public logOutUser():any{
+  this.appService.logOut(this.authToken).subscribe((response)=>{
+    if(response.status === 200){
+      localStorage.clear();
+       Cookie.delete('receiverId');
+       Cookie.delete('receiverName');
+       Cookie.delete('authToken');
+       this.socketService.disconnectUser();
+       this.socketService.exitSocket();
+       setTimeout(()=>this.router.navigate(['/']),500);
+    }else{
+      this.toastr.warning(response.message.toUpperCase());
+    }
+},(err)=>{
+      this.toastr.error('INTERNAL SERVER ERROR');
+      this.router.navigate(['/error']);
+  });
+}//function to log out user ends.
+
+/**
+ * function to get all meeting of 
+ * user.
+ * @param userName F
+ * @param userId 
+ */
+public getMeetingsOfUser(userName,userId):any{
+  this.receiverName = userName;
+  this.receiverId = userId;
+  this.meetingService.getAllMeetingsOfUser(this.authToken,this.receiverId)
+  .subscribe((response)=>{
+    console.log(response);
+          if(response.status === 200){
+            this.allMeetings = response.data;
+             this.allMeetings.forEach((meeting)=>{
+                 meeting.subject = meeting.subject;
+                 meeting.description = meeting.description;
+                 meeting.start = new Date(meeting.startDate);
+                 meeting.end = new Date(meeting.endDate);
+                 meeting.color = colors.blue;
+                 meeting.remindMe = true;
+             });
+             this.events = this.allMeetings;
+             this.refresh.next();
+             this.toastr.success('MEETINGS FOUND AND UPDATED');
+          }else{
+            this.toastr.warning(response.message.toUpperCase());
+          }
+     },(err)=>{
+            this.toastr.error('INTERNAL SERVER ERROR');
+            this.router.navigate(['/error']);
+      });
+   
+}//function to get all meetings of user ends.
+
+//User utility functions ends.
+
+
+//Functions to handle events based tasks.
+/**
+ * Function to verify user using socket.
+ */
+public verifyUserUsingSocket():any{
+  this.socketService.verifyUser().subscribe(()=>{
+    this.socketService.setUser(this.authToken);
+  });
+}
+
+/**
+ * Function to handle error,if 
+ * user is not verified using socket.
+ */
+public handleSocketAuthError():any{
+  this.socketService.authError().subscribe(()=>{
+    this.toastr.warning('AUTHORIZATION FAILED');
+    this.logOutUser();
+  });
+}
+//Handle events based function Ends here.
+  
+//Function and properties related to user ends here.
+   
 
 }

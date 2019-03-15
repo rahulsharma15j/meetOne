@@ -1,3 +1,161 @@
+<!--Nav bar for admin dashboard-->
+<app-nav></app-nav>
+
+<div class="parent-div">
+
+  <!--User list for small screen-->
+    <div class="accordion my-accord panel" id="user-list">
+      <div class="card">
+        <div class="card-header user-btn" id="listHeading">
+           <div data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               <h5>Users list</h5>
+           </div>
+        </div>
+    
+        <div id="collapseOne" class="collapse hide" aria-labelledby="listHeading" data-parent="#user-list">
+          <div class="card-body my-card">
+              <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+               <div class="list">
+                  Rahul sharma
+               </div>
+           </div>
+        </div>
+      </div>
+    </div><!--user for small screen list ends-->
+
+   <div class="row my-row">
+   <div class="calender-div">
+      <div class="row text-center cal">
+          <!--Display current date,day-->
+          <div class="col-md-3">
+              <h3 id="date">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+          </div> 
+
+          <!--Toggle between month , day ,week-->
+          <div class="col-md-3 cal-item">
+              <div class="btn-group btn-group-sm">
+                <div class="btn btn-primary custom-btn" (click)="view = CalendarView.Month" 
+                [class.active]="view === CalendarView.Month">Month</div>
+
+                <div class="btn btn-primary" (click)="view = CalendarView.Week" 
+                [class.active]="view === CalendarView.Week">Week</div>
+
+                <div class="btn btn-primary custom-btn" (click)="view = CalendarView.Day" 
+                [class.active]="view === CalendarView.Day">Day</div>
+              </div>
+            </div> <!--Toggle between month , day ,week-->
+                
+ 
+              <!-- Button to trigger create meeting modal -->
+               <div class="col-md-3 cal-item">
+                  <div (click)="onClick()" class="btn btn-primary btn-sm custom-btn" data-toggle="modal" 
+                  data-target="#exampleModalCenter">Create new meeting</div>
+                </div><!--Create meeting button ends-->
+               
+                <!--Left and right arrow starts-->
+                <div class="col-md-3 cal-item">
+                    <div class="btn-group btn-group-sm">
+                      <div class="left" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" 
+                      (viewDateChange)="activeDayIsOpen = false"></div>
+                      <div class="btn btn-primary custom-btn" mwlCalendarToday [(viewDate)]="viewDate">
+                        Today
+                      </div>
+                      <div class="right" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" 
+                      (viewDateChange)="activeDayIsOpen = false"></div>
+                    </div>
+                  </div><!--Left and right arrow ends-->
+              </div>
+              <!--nav-->
+              
+              <!--Calendar view-->
+              <div [ngSwitch]="view" id="cal-view">
+                  <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" 
+                  (dayClicked)="viewDate = $event.day.date; view = 'day'"></mwl-calendar-month-view>
+                  <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" 
+                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"></mwl-calendar-week-view>
+                  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"></mwl-calendar-day-view>
+              </div><!--Calendar view ends-->
+            </div><!--end row-->
+
+        <!--Users List-->    
+        <div class="user-list">
+          <h5>Users List</h5>
+          <div class="search ">
+            <input class="form-control" type="text" [(ngModel)]="userName" placeholder="Search user.." aria-label="search">
+          </div >
+          <div class="border-list">
+          <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
+            <a  (click)="getMeetingsOfUser(user.firstName + ' ' + user.lastName,user.userId)">
+              <span>{{user.firstName}} {{user.lastName}}<br>
+               {{user.email}}</span>
+            </a>
+            </div>
+          </div>
+      </div><!--Users list ends-->
+
+</div><!--div ends-->
+</div>
+
+ <!-- Modal to handle create meeting starts -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div><!-- Modal to handle create meeting ends --> 
+
+
+<!-------------------------------------------------------->
 <ng-template #modalContent let-close="close">
   <div class="modal-header">
     <h5 class="modal-title">Meeting Details</h5>
@@ -76,236 +234,4 @@
         <button type="button" class="btn btn-outline-secondary" (click)="close()">Cancel</button>
       </div>
     </ng-template>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!------------------------------------------------------------------------------------------>
-<app-nav></app-nav>
-<div class="parent-div">
-  <!--User list for small screen-->
-  <div class="accordion my-accord panel" id="user-list">
-      <div class="card">
-        <div class="card-header user-btn" id="listHeading">
-           <div data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               <h5>Users list</h5>
-           </div>
-        </div>
-    
-        <div id="collapseOne" class="collapse hide" aria-labelledby="listHeading" data-parent="#user-list">
-          <div class="card-body my-card">
-              <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-           </div>
-        </div>
-      </div>
-    </div>
-  <!--user list ends-->
-   <div class="row my-row">
-   <div class="calender-div">
-     <!--nav-->
-       <div class="row text-center cal">
-          <div class="col-md-3">
-              <h3 id="date">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-            </div> 
-          <div class="col-md-3 cal-item">
-              <div class="btn-group btn-group-sm">
-                <div
-                  class="btn btn-primary custom-btn"
-                  (click)="view = CalendarView.Month"
-                  [class.active]="view === CalendarView.Month"
-                >
-                  Month
-                </div>
-                <div
-                  class="btn btn-primary"
-                  (click)="view = CalendarView.Week"
-                  [class.active]="view === CalendarView.Week"
-                >
-                  Week
-                </div>
-                <div
-                  class="btn btn-primary custom-btn"
-                  (click)="view = CalendarView.Day"
-                  [class.active]="view === CalendarView.Day"
-                >
-                  Day
-                </div>
-              </div>
-            </div>
-                
- 
-              <!-- Button trigger modal -->
-               <div class="col-md-3 cal-item">
-                  <div (click)="onClick()" class="btn btn-primary btn-sm custom-btn" data-toggle="modal" data-target="#exampleModalCenter">
-                    Create new meeting
-                  </div>
-                </div>
-               
- 
-
-
-               
-               
-                
-                <div class="col-md-3 cal-item">
-                    <div class="btn-group btn-group-sm">
-                      <div
-                        class="left"
-                        mwlCalendarPreviousView
-                        [view]="view"
-                        [(viewDate)]="viewDate"
-                        (viewDateChange)="activeDayIsOpen = false"
-                      >
-                         
-                      </div>
-                      <div
-                        class="btn btn-primary custom-btn"
-                        mwlCalendarToday
-                        [(viewDate)]="viewDate"
-                      >
-                        Today
-                      </div>
-                      <div
-                        class="right"
-                        mwlCalendarNextView
-                        [view]="view"
-                        [(viewDate)]="viewDate"
-                        (viewDateChange)="activeDayIsOpen = false"
-                      >
-                      </div>
-                    </div>
-                  </div>
-              </div>
-              <!--nav-->
-              
-              
-              <div [ngSwitch]="view" id="cal-view">
-                  <mwl-calendar-month-view
-                  *ngSwitchCase="'month'"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  (dayClicked)="viewDate = $event.day.date; view = 'day'"
-                >
-                </mwl-calendar-month-view>
-                <mwl-calendar-week-view
-                  *ngSwitchCase="'week'"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
-                >
-                </mwl-calendar-week-view>
-                <mwl-calendar-day-view
-                  *ngSwitchCase="'day'"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                >
-                </mwl-calendar-day-view>
-              
-              </div>
-            
-
-          
-        </div><!--end row-->
-        <div class="user-list">
-          <h5>Users List</h5>
-          <div class="search ">
-            <input class="form-control" type="text" [(ngModel)]="userName" placeholder="Search user.." aria-label="search">
-          </div >
-           
-          <div class="border-list">
-          <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
-            <a  (click)="getMeetingsOfUser(user.firstName + ' ' + user.lastName,user.userId)">
-              <span>{{user.firstName}} {{user.lastName}}<br>
-               {{user.email}}</span>
-            </a>
-              
-               
-           </div>
-          </div>
-      </div>
-</div><!--div ends-->
-
-</div>
-
- <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div>
-</div> 
-
-
-<!-------------------------------------------------------->

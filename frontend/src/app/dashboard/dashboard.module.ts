@@ -12,6 +12,7 @@ import { CreateMeetingComponent } from './create-meeting/create-meeting.componen
  
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 import { RouterModule } from '@angular/router';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [AdminDashboardComponent, UserDashboardComponent, CreateMeetingComponent,   UpdateMeetingComponent],
@@ -28,6 +29,8 @@ import { RouterModule } from '@angular/router';
       ]
     }
     ]),
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

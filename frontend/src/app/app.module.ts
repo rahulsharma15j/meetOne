@@ -11,6 +11,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { InternalErrorComponent } from './internal-error/internal-error.component';
 import { SharedModule } from './shared/shared.module';
+
  
  
  
@@ -20,7 +21,6 @@ import { SharedModule } from './shared/shared.module';
     AppComponent,
     NotFoundComponent,
     InternalErrorComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -31,6 +31,7 @@ import { SharedModule } from './shared/shared.module';
     UserModule,
     DashboardModule,
     AppRoutingModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
