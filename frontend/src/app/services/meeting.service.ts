@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -9,7 +9,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class MeetingService {
 
   public baseUrl : string = "http://localhost:3000/api/v1";
+
+  private user = new BehaviorSubject('');
+  currentUser = this.user.asObservable();
+
   constructor(private http:HttpClient) { }
+
+  public changeUser(user:any):any{
+    console.log('change user calleds');
+    console.log(user);
+    this.user.next(user);
+  }
 
   public checkStartDateAndEndDate(startingDate:any,endingDate:any):boolean{
     if(new Date(startingDate) > new Date(endingDate)){
@@ -42,17 +52,17 @@ export class MeetingService {
   public createMeeting(data):Observable<any>{
    
     const params = new HttpParams()
+     .set('subject',data.subject)
      .set('adminId',data.adminId)
-     .set('adminName',data.adminId)
-     .set('adminId',data.adminId)
-     .set('userId',data.adminId)
-     .set('userName',data.adminId)
-     .set('userEmail',data.adminId)
-     .set('startDate',data.adminId)
-     .set('description',data.adminId)
-     .set('endDate',data.adminId)
+     .set('adminName',data.adminName)
+     .set('userId',data.userId)
+     .set('userName',data.userName)
+     .set('userEmail',data.userEmail)
+     .set('startDate',data.startDate)
+     .set('description',data.description)
+     .set('endDate',data.endDate)
      .set('authToken',data.authToken)
-     .set('location',data.adminId);
+     .set('location',data.location);
     return this.http.post(`${this.baseUrl}/meetings/create`,params);
   }
 

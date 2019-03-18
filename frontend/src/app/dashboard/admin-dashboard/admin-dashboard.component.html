@@ -89,8 +89,8 @@
  
               <!-- Button to trigger create meeting modal -->
                <div class="col-md-3 cal-item">
-                  <div (click)="onClick()" class="btn btn-primary btn-sm custom-btn" data-toggle="modal" 
-                  data-target="#exampleModalCenter">Create new meeting</div>
+                  <div class="btn btn-primary btn-sm custom-btn" (click)="showModal()" data-toggle="modal" 
+                  data-target="#myModal">Create new meeting</div>
                 </div><!--Create meeting button ends-->
                
                 <!--Left and right arrow starts-->
@@ -105,16 +105,22 @@
                       (viewDateChange)="activeDayIsOpen = false"></div>
                     </div>
                   </div><!--Left and right arrow ends-->
+                  <h6 style="text-align:center">Calender view for {{ selectedUser }}</h6>
               </div>
               <!--nav-->
               
               <!--Calendar view-->
               <div [ngSwitch]="view" id="cal-view">
-                  <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" 
-                  (dayClicked)="viewDate = $event.day.date; view = 'day'"></mwl-calendar-month-view>
+                  <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                  [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="viewDate = $event.day.date; view = 'day'" 
+                  (eventClicked)="handleEvent('Clicked',$event.event)" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-month-view>
                   <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" 
-                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"></mwl-calendar-week-view>
-                  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"></mwl-calendar-day-view>
+                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'" [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+                  </mwl-calendar-week-view>
+                  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+                </mwl-calendar-day-view>
               </div><!--Calendar view ends-->
             </div><!--end row-->
 
@@ -126,7 +132,7 @@
           </div >
           <div class="border-list">
           <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
-            <a  (click)="getMeetingsOfUser(user.firstName + ' ' + user.lastName,user.userId)">
+            <a  (click)="getUserOnClick(user)">
               <span>{{user.firstName}} {{user.lastName}}<br>
                {{user.email}}</span>
             </a>
@@ -138,11 +144,11 @@
 </div>
 
  <!-- Modal to handle create meeting starts -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" #closeModal *ngIf="user" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Create Meeting for {{ user.firstName }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -158,7 +164,7 @@
 <!-------------------------------------------------------->
 <ng-template #modalContent let-close="close">
   <div class="modal-header">
-    <h5 class="modal-title">Meeting Details</h5>
+    <h5 class="modal-title">Meeting Details {{ modalData?.event.userName}}</h5>
     <button type="button" class="close" (click)="close()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -168,28 +174,28 @@
           <div class="form">
               <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-4 col-form-label">Subject:</label>
-                    <div class="col-sm-6">Meeting Subject.               
+                    <div class="col-sm-6">{{ modalData?.event.subject }}               
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label">Description:</label>
-                    <div class="col-sm-6">Meeting Description.</div>
+                    <div class="col-sm-6">{{ modalData?.event.description }}</div>
                   </div>
                   <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">StartTime:</label>
-                        <div class="col-sm-6">11:00</div>
+                        <div class="col-sm-6">{{ modalData?.event.start | date:'medium'}}</div>
                       </div>
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-2 col-form-label">EndTime:</label>
-                          <div class="col-sm-6">12:00</div>
+                          <div class="col-sm-6">{{ modalData?.event.end | date:'medium'}}</div>
                         </div>
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Location:</label>
-                            <div class="col-sm-6">Agra</div>
+                            <div class="col-sm-6">{{ modalData?.event.location }}</div>
                           </div>
                           <div class="form-group row">
-                              <label for="inputEmail3" class="col-sm-2 col-form-label">Meeting Scheduled by:</label>
-                              <div class="col-sm-6">Rahul Sharma</div>
+                              <label for="inputEmail3" class="col-sm-2 col-form-label">Created by:</label>
+                              <div class="col-sm-6">{{ modalData?.event.adminName }}</div>
                             </div>
                           </div>
         </div> 

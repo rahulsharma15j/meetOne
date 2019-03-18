@@ -1,4 +1,4 @@
-import { Component,ViewChild,TemplateRef,OnInit, ChangeDetectionStrategy  } from '@angular/core';
+import { Component,ViewChild,TemplateRef,OnInit, ChangeDetectionStrategy, ElementRef  } from '@angular/core';
 import { startOfDay,endOfDay,subDays,addDays,endOfMonth,isSameDay,isSameMonth,addHours } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,6 @@ import { ToastrService } from 'ngx-toastr';
 import { SocketService } from 'src/app/services/socket.service';
 
 const colors: any = {
-   
   blue: {
     primary: '#1e90ff',
     secondary: '#D1E8FF'
@@ -26,15 +25,15 @@ const colors: any = {
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
-  
-
 })
+
 export class AdminDashboardComponent implements OnInit {
+
+// Angular Calender related members and variables starts here.
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @ViewChild('modalReminder') modalReminder: TemplateRef<any>;
   @ViewChild('modalDeleteMeeting') modalDeleteMeeting: TemplateRef<any>;
   refresh: Subject<any> = new Subject();
-
   view: string = 'month';
   CalendarView = CalendarView;
   viewDate: Date = new Date();
@@ -42,28 +41,7 @@ export class AdminDashboardComponent implements OnInit {
     action: string;
     event: CalendarEvent;
   };
-
-  /*events: CalendarEvent[] = [
-    {
-      title: 'Resizable event',
-      color: colors.yellow,
-      start: new Date(),
-      end: addDays(new Date(), 1), // an end date is always required for resizable events to work
-      resizable: {
-        beforeStart: true, // this allows you to configure the sides the event is resizable from
-        afterEnd: true
-      }
-    },
-    {
-      title: 'A non resizable event',
-      color: colors.blue,
-      start: new Date(),
-      end: addDays(new Date(), 1)
-    }
-     
-  ];*/
-
-
+  
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
@@ -80,22 +58,6 @@ export class AdminDashboardComponent implements OnInit {
     }
   ];
    
-  
-  public userName: any;
-  public userId: any;
-  public activeDayIsOpen: boolean = true;
-  public receiverName: any;
-  public receiverId: any;
-  public authToken: any;
-  public userInfo: any;
-   
-  public userList : any = []
-  public allMeetings: any = [];
-  public allUsersList: any = [];
-  public allOnlineUsersList: any = [];
-  public events: CalendarEvent[] = [];
-  adminId: any;
-
   constructor(private modal: NgbModal,
               private toastr:ToastrService,
               private router: Router,
@@ -103,15 +65,10 @@ export class AdminDashboardComponent implements OnInit {
               public appService:AppService,
               public socketService:SocketService) {}
 
- 
-
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
+      if ((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0){
         this.activeDayIsOpen = false;
       } else {
         this.activeDayIsOpen = true;
@@ -119,11 +76,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
     this.handleEvent('Dropped or resized', event);
@@ -134,37 +87,70 @@ export class AdminDashboardComponent implements OnInit {
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
   }
+// Angular Calender related members and variables ends here.
 
    
-/*************************************************************************************** */
+//Admin dashboard related members and variables starts here.
 
-
+  @ViewChild('closeModal') closeModal: ElementRef;
+  public userName: any;
+  public userId: any;
+  public activeDayIsOpen: boolean = true;
+  public receiverName: any;
+  public receiverId: any;
+  public authToken: any;
+  public userInfo: any;
+  public selectedUser:any;
+  public adminId: any;
+  public adminName: any;
+   
+  public userList : any = []
+  public allMeetings: any = [];
+  public allUsersList: any = [];
+  public allOnlineUsersList: any = [];
+  public events: CalendarEvent[] = [];
+  
+public user:any;
 ngOnInit() {
   this.receiverId = Cookie.get('receiverId');
   this.receiverName = Cookie.get('receiverName');
   this.authToken = Cookie.get('authToken');
+  this.userInfo = localStorage.getItem('userInfo');
   this.adminId = this.receiverId;
-  this.verifyUserUsingSocket();
+  this.adminName = this.receiverName;
+  this.verifyAdminUsingSocket();
   this.getAllUsersForAdmin();
   this.getOnlineUsers();
-   
   this.handleSocketAuthError();
+  this.meetingService.currentUser.subscribe(user=>this.user = user);
 
-  
-
+  this.appService.popup.subscribe((val)=>{
+    if(val == 'close'){
+      this.closeModal.nativeElement.click();
+       
+    } 
+});
 }
 
-public getMeetingOfClickedUser():any{
-
+public getMeegtingsOfAdmin():any{
+  this.getMeetings(this.receiverName,this.adminId);
 }
 
+ 
+
+public getUserOnClick(user):any{
+  if(userInfo.userType === 'admin'){
+
+  }
+  this.user = user;
+  this.meetingService.changeUser(this.user);
+  this.getMeetings(`${user.firstName} ${user.lastName}`,user.userId);
+}
 
 public getAllUsersForAdmin():any{
   this.appService.getAllUsers(this.authToken).subscribe((response)=>{
-    console.log(response);
     if(response.status === 200){
       this.allUsersList = response.data;
-      console.log(this.allUsersList);
     }else{
       this.toastr.warning(response.message.toUpperCase());
     }
@@ -188,26 +174,32 @@ public deleteUserMeeting(meeting):any{
         this.router.navigate(['/error']);
    });
 }
+ 
+public showModal():any{
+   if(!this.user){
+     this.toastr.warning("PLEASE SELECT A USER FROM LIST");
+   }
+} 
 
-public getMeetingsOfUser(userName,userId):any{
-  this.receiverName = userName;
+
+public getMeetings(userName,userId):any{
+  this.selectedUser = userName;
+  this.receiverName = userName; 
   this.receiverId = userId;
   this.meetingService.getAllMeetingsOfUser(this.authToken,this.receiverId)
   .subscribe((response)=>{
-    console.log(response);
           if(response.status === 200){
-            
             this.allMeetings = response.data;
-             this.allMeetings.forEach((meeting)=>{
-                 meeting.subject = meeting.subject;
-                 meeting.description = meeting.description;
-                 meeting.start = new Date(meeting.startDate);
-                 meeting.end = new Date(meeting.endDate);
-                 meeting.color = colors.blue;
-                 meeting.actions = this.actions;
-                 meeting.remindMe = true;
-             });
-             this.events = this.allMeetings;
+            for(let meeting of this.allMeetings){
+              meeting.subject = meeting.subject;
+              meeting.description = meeting.description;
+              meeting.start = new Date(meeting.startDate);
+              meeting.end = new Date(meeting.endDate);
+              meeting.color = colors.blue;
+              meeting.actions = this.actions;
+              meeting.remindMe = true;
+            }
+            this.events = this.allMeetings;
              this.refresh.next();
              this.toastr.success('MEETINGS FOUND AND UPDATED');
           }else{
@@ -219,7 +211,6 @@ public getMeetingsOfUser(userName,userId):any{
       });
    
 }
-
 
 public logOutUser():any{
   this.appService.logOut(this.authToken).subscribe((response)=>{
@@ -258,7 +249,7 @@ public getOnlineUsers():any{
 
 
 
-public verifyUserUsingSocket():any{
+public verifyAdminUsingSocket():any{
   this.socketService.verifyUser().subscribe(()=>{
     this.socketService.setUser(this.authToken);
   });
@@ -267,7 +258,7 @@ public verifyUserUsingSocket():any{
 
 public handleSocketAuthError():any{
   this.socketService.authError().subscribe(()=>{
-    this.toastr.warning('AUTHORIZATION FAILED');
+    this.toastr.warning(' ADMIN AUTHORIZATION FAILED');
     this.logOutUser();
   });
 }

@@ -4,6 +4,7 @@ import { Cookie } from 'ng2-cookies';
 import { ToastrService } from 'ngx-toastr';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-create-meeting',
@@ -15,28 +16,34 @@ export class CreateMeetingComponent implements OnInit{
   public receiverName: any;
   public authToken: any;
   public adminName: any;
-  public meetingSubject: any;
+  public subject: any;
   public description: any;
-  public selectedUser: any;
   public userSelectedByAdmin: any;
   public startingDate: any;
   public endingDate: any;
-  public meetingLocation: any;
+  public location: any;
+  public user:any;
   
 
     constructor(private router: Router,
       private toastr:ToastrService,
       public meetingService:MeetingService,
-      public socketService:SocketService) { 
+      public socketService:SocketService,
+      public appService:AppService) { 
       console.log('meeting called.');
     }
-
+    
     ngOnInit() {
     
       this.receiverId = Cookie.get('receiverId');
       this.receiverName = Cookie.get('receiverName');
       this.authToken = Cookie.get('authToken');
       this.adminName = Cookie.get('receiverName');
+      this.meetingService.currentUser.subscribe(user=>{
+        this.user = user
+        console.log(this.user);
+         
+      });
        
       }
 
@@ -48,7 +55,7 @@ export class CreateMeetingComponent implements OnInit{
 
       public createNewMeeting(): any {
 
-        if (!this.meetingSubject) {
+        if (!this.subject) {
           this.toastr.warning("PLEASE ENTER MEETING SUBJECT");
         }
         else if (!this.description) {
@@ -59,7 +66,7 @@ export class CreateMeetingComponent implements OnInit{
         else if (!this.endingDate) {
           this.toastr.warning("PLEASE ENTER MEETING END DATE");
         }
-        else if (!this.meetingLocation) {
+        else if (!this.location) {
           this.toastr.warning("PLEASE ENTER MEETING LOCATION");
         }
         else if (this.meetingService.checkStartDateAndEndDate(this.startingDate ,this.endingDate)) {
@@ -71,25 +78,29 @@ export class CreateMeetingComponent implements OnInit{
         }
         else {
           let newMeeting = {
-            subject: this.meetingSubject,
+            subject: this.subject,
             adminId: this.receiverId,
             adminName:this.receiverName,
-            userId:this.selectedUser.userId,
-            userName:`${this.userSelectedByAdmin.firstName} ${this.userSelectedByAdmin.lastName}`,
-            userEmail:this.selectedUser.email,
+            userId:this.user.userId,
+            userName:`${this.user.firstName} ${this.user.lastName}`,
+            userEmail:this.user.email,
             startDate:this.startingDate.getTime(),
             description:this.description,
             endDate:this.endingDate.getTime(),
-            location:this.meetingLocation
+            location:this.location,
+            authToken:this.authToken
           }
+          console.log(newMeeting);
          this.meetingService.createMeeting(newMeeting).subscribe((response) => {
             if(response.status == 200) {
+                this.modalClose();
                 let notification = {
                   userId: newMeeting.userId,
                   message:`Admin ${newMeeting.adminName} scheduled a meeting for you.`
                 }
                 this.sendMeetingCreateNotification(notification);
                 this.toastr.success('MEETING CREATED SUCCESSFULLY');
+                
             }
               else {
                 this.toastr.warning(`${response.message}`);
@@ -101,6 +112,9 @@ export class CreateMeetingComponent implements OnInit{
             });
           }
         }
-        
+        public modalClose():any{
+          console.log('modal close called.');
+          this.appService.popup.next('close');
+        }     
 
 }
