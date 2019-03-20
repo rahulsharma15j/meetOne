@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SocketService {
-  public baseUrl : string = "http://localhost:3000/api/v1";
+  public baseUrl : string = "http://localhost:3000";
   private socket:any;
   constructor(private http:HttpClient) { 
-    this.socket = io(this.baseUrl);
+     this.socket = io(this.baseUrl);
   }
 
   public setUser(authToken):any{
@@ -35,15 +35,15 @@ export class SocketService {
   public verifyUser():any{
     return Observable.create((observer)=>{
      this.socket.on('verify-user', (data)=>{
-        observer.next(data);
+         observer.next(data);
      });
     });
   }
 
   public onlineUsersList():any{
     return Observable.create((observer)=>{
-      this.socket.on('online-users-list', (userList)=>{
-         observer.next(userList);
+       this.socket.on('online-user-list', (userList)=>{
+          observer.next(userList);
       });
      });
   }

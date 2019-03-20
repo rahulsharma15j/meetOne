@@ -43,7 +43,7 @@ export class AdminDashboardComponent implements OnInit {
   };
   
   actions: CalendarEventAction[] = [
-    {
+    { 
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
@@ -103,6 +103,7 @@ export class AdminDashboardComponent implements OnInit {
   public selectedUser:any;
   public adminId: any;
   public adminName: any;
+  public user:any;
    
   public userList : any = []
   public allMeetings: any = [];
@@ -110,38 +111,40 @@ export class AdminDashboardComponent implements OnInit {
   public allOnlineUsersList: any = [];
   public events: CalendarEvent[] = [];
   
-public user:any;
+
 ngOnInit() {
   this.receiverId = Cookie.get('receiverId');
   this.receiverName = Cookie.get('receiverName');
   this.authToken = Cookie.get('authToken');
-  this.userInfo = localStorage.getItem('userInfo');
-  this.adminId = this.receiverId;
-  this.adminName = this.receiverName;
-  this.verifyAdminUsingSocket();
-  this.getAllUsersForAdmin();
-  this.getOnlineUsers();
-  this.handleSocketAuthError();
-  this.meetingService.currentUser.subscribe(user=>this.user = user);
-
-  this.appService.popup.subscribe((val)=>{
-    if(val == 'close'){
-      this.closeModal.nativeElement.click();
-       
-    } 
-});
+  this.userInfo = this.appService.getUserInfoFromLocalStorage();
+  if(this.userInfo.userType === 'admin'){
+    this.adminId = this.receiverId;
+    this.adminName = this.receiverName;
+    this.verifyAdminUsingSocket();
+    this.getAllUsersForAdmin();
+    this.getOnlineUsers();
+    this.getMeegtingsOfAdmin();
+    this.handleSocketAuthError();
+    this.meetingService.currentUser.subscribe(user=>this.user = user);
+    this.appService.popup.subscribe((val)=>{
+      if(val == 'close'){
+        this.closeModal.nativeElement.click();
+      } 
+  });
+ }else{
+   this.router.navigate(['/dashboard/user']);
+ }
 }
 
 public getMeegtingsOfAdmin():any{
-  this.getMeetings(this.receiverName,this.adminId);
+  this.events = [];
+  this.getMeetings(this.adminName,this.adminId);
 }
 
  
 
 public getUserOnClick(user):any{
-  if(userInfo.userType === 'admin'){
-
-  }
+  this.events = [];
   this.user = user;
   this.meetingService.changeUser(this.user);
   this.getMeetings(`${user.firstName} ${user.lastName}`,user.userId);
@@ -200,8 +203,8 @@ public getMeetings(userName,userId):any{
               meeting.remindMe = true;
             }
             this.events = this.allMeetings;
-             this.refresh.next();
-             this.toastr.success('MEETINGS FOUND AND UPDATED');
+            this.refresh.next();
+            this.toastr.success(response.message.toUpperCase());
           }else{
             this.toastr.warning(response.message.toUpperCase());
           }
@@ -213,8 +216,11 @@ public getMeetings(userName,userId):any{
 }
 
 public logOutUser():any{
+  console.log('logout called');
   this.appService.logOut(this.authToken).subscribe((response)=>{
+    console.log(response);
     if(response.status === 200){
+      
       localStorage.clear();
        Cookie.delete('receiverId');
        Cookie.delete('receiverName');
@@ -237,21 +243,25 @@ public logOutUser():any{
  */
 
 public getOnlineUsers():any{
+  console.log('all online users');
   this.socketService.onlineUsersList().subscribe((usersList)=>{
-      usersList.forEach((user)=>{
-        this.allOnlineUsersList.push(user);
-      }); 
-      this.allUsersList.forEach((user)=>{
-         (this.allOnlineUsersList.includes(user.userId))? user.status = 'online':user.status = 'offline';
-      });
+    console.log(usersList);
+    for(let user in usersList){
+       this.allOnlineUsersList.push(user);
+    }
+    console.log(this.allOnlineUsersList);
+    this.allUsersList.forEach((user)=>{
+      (this.allOnlineUsersList.includes(user.userId))? user.status = 'online':user.status = 'offline';
+    });
+
+       
   });
 }
 
 
-
 public verifyAdminUsingSocket():any{
   this.socketService.verifyUser().subscribe(()=>{
-    this.socketService.setUser(this.authToken);
+     this.socketService.setUser(this.authToken);
   });
 }
 

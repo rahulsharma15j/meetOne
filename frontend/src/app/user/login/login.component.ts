@@ -41,16 +41,24 @@ export class LoginComponent implements OnInit {
          if(response.status === 200){
              this.modalClose();
              this.toastr.success('Login successfull.','Welcome');
-             this.fullName = `${response.data.userDetails.firstName} ${response.data.userDetails.lastName}`
+
+             this.fullName = `${response.data.userDetails.firstName} ${response.data.userDetails.lastName}`;
+             this.appService.userType = response.data.userDetails.userType;
              this.appService.setUserInfoInLocalStorage(response.data.userDetails);
              Cookie.set('receiverId',response.data.userDetails.userId);
              Cookie.set('receiverName',this.fullName);
              Cookie.set('authToken',response.data.authToken);
-             
-             if(response.data.userDetails.userType === 'admin'){
-              this.router.navigate(['/dashboard/admin']);
+
+              if(response.data.userDetails.userType === 'admin'){
+                setTimeout(()=>{
+                  this.router.navigate(['/dashboard/admin']);
+                },500);
+              
              }else{
-              this.router.navigate(['/dashboard/user']);
+              setTimeout(()=>{
+                this.router.navigate(['/dashboard/user']);
+              },500);
+              
              }
             
           }else{
@@ -65,7 +73,7 @@ export class LoginComponent implements OnInit {
 
   public modalClose():any{
     console.log('modal close called.');
-    this.appService.popup.next('close');
+    this.appService.popup.next('logIn');
   }
    
 

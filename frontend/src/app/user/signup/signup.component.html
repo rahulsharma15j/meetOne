@@ -26,8 +26,9 @@
      
      <div class="form-group">
          <label for="country">Country</label>
-         <select class="select-country form-control-sm" (change)="onSelectCountryName($event.target.value)">
-             <option *ngFor="let country of countriesList" [value]="country?.code">{{country?.name}}</option>
+         <select placeholder="Country"  class="select-country form-control-sm" (change)="onSelectCountryName($event.target.value)">
+            <option selected disabled hidden>Country</option>
+            <option  *ngFor="let country of countriesList" [value]="country?.code">{{country?.name}}</option>
           </select>
      </div>
  

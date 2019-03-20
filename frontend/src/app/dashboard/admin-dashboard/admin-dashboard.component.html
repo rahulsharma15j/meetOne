@@ -1,5 +1,27 @@
 <!--Nav bar for admin dashboard-->
-<app-nav></app-nav>
+<nav class="navbar navbar-expand-sm bg-info navbar-dark">
+  <a class="navbar-brand" href="" (click)='onClickOnLink($event)'><h3>MeetOne</h3></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navItems">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navItems">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item ml-auto"><a class="nav-link" (click)='getMeegtingsOfAdmin()' data-toggle="modal" data-target="#exampleModalCenter">My Meetings</a></li>
+              <li class="nav-item ml-auto"><a class="nav-link" (click)='onClick()' data-toggle="modal" data-target="#exampleModalCenter">Admin name</a></li>
+              <li class="nav-item ml-auto">
+                <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ adminName }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button class="dropdown-item" type="button">Profile</button>
+                  <button class="dropdown-item" type="button" (click)="logOutUser()">Logout</button>
+                </div>
+              </div></li>
+          </ul>
+      </div>
+</nav>
+<!--Nav bar ends-->
 
 <div class="parent-div">
 
@@ -14,51 +36,12 @@
     
         <div id="collapseOne" class="collapse hide" aria-labelledby="listHeading" data-parent="#user-list">
           <div class="card-body my-card">
-              <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
-               <div class="list">
-                  Rahul sharma
-               </div>
+            <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
+              <a  (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
+                <span>{{user.firstName}} {{user.lastName}}<br>
+                 {{user.email}}</span>
+              </a>
+              </div>
            </div>
         </div>
       </div>
@@ -132,9 +115,11 @@
           </div >
           <div class="border-list">
           <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
-            <a  (click)="getUserOnClick(user)">
+            <a  (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
               <span>{{user.firstName}} {{user.lastName}}<br>
                {{user.email}}</span>
+              <span *ngIf="user.status == online"><i class="online"></i></span>
+              <span *ngIf="user.status != online"><i class="offline"></i></span>
             </a>
             </div>
           </div>

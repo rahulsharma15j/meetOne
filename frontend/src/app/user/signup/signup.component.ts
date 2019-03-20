@@ -22,8 +22,6 @@ export class SignupComponent implements OnInit {
   public allCountriesPhones:any ;
   public countriesList:any[] = [];
    
-   
-   
   constructor(public router:Router,
     private toastr:ToastrService,
     public appService:AppService) { console.log('signup called')}
@@ -52,6 +50,10 @@ export class SignupComponent implements OnInit {
              phone: this.allCountriesPhones[key]
            });
       });
+      this.countriesList.sort((country1,country2)=>{
+         return (country1.name.toLowerCase() > country2.name.toLowerCase())? 1 : -1;
+      });
+      console.log(this.countriesList);
     });
   }
 
@@ -113,7 +115,7 @@ export class SignupComponent implements OnInit {
 
   public modalClose():any{
     console.log('modal close called.');
-    this.appService.popup.next('close');
+    this.appService.popup.next('signUp');
   }
   
 }

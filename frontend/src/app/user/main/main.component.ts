@@ -22,14 +22,19 @@ export class MainComponent implements OnInit,OnDestroy  {
   
   constructor(public router:Router,public appService: AppService ) {
    this.appService.popup.subscribe((val)=>{
-        if(val == 'close'){
+        if(val == 'signUp'){
           this.closeModal.nativeElement.click();
           this.signupSuccess = true;
           this.isParent = false;
-        }else if(val == 'close2'){
+        }else if(val == 'recovery'){
           this.closeModal.nativeElement.click();
           this.recoveryMail = true;
           this.isParent = false;
+        }else if(val == 'logIn'){
+          this.closeModal.nativeElement.click();
+          this.recoveryMail = false;
+          this.signupSuccess = false;
+          this.isParent = true;
         }
     });
    }

@@ -13,6 +13,12 @@ import { CreateMeetingComponent } from './create-meeting/create-meeting.componen
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 import { RouterModule } from '@angular/router';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { AppRouteGuard } from '../services/app-route.guard';
+
+ 
+ 
+ 
+
 
 @NgModule({
   declarations: [AdminDashboardComponent, UserDashboardComponent, CreateMeetingComponent,   UpdateMeetingComponent],
@@ -22,19 +28,23 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     NgbModalModule,
     FormsModule,
     SharedModule,
-    RouterModule.forChild([
-      {path:'dashboard/admin',component:AdminDashboardComponent,
-      children:[
-        {path:'',component:CreateMeetingComponent},
-      ]
-    }
-    ]),
     OwlDateTimeModule, 
     OwlNativeDateTimeModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
-  ]
+    }),
+    RouterModule.forChild([
+      { path: 'dashboard/user',component:UserDashboardComponent,canActivate:[AppRouteGuard,UserRouteGuard]},
+      {path:'dashboard/admin',component:AdminDashboardComponent,
+      canActivate:[AppRouteGuard,AdminRouteGuard],
+      children:[
+        {path:'',component:CreateMeetingComponent},
+      ]
+    }
+    ]),
+    
+  ],
+  providers:[AppRouteGuard]
 })
 export class DashboardModule { }

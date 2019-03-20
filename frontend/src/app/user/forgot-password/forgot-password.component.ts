@@ -52,6 +52,6 @@ export class ForgotPasswordComponent implements OnInit {
 
   public modalClose():any{
     console.log('modal close called.');
-    this.appService.popup.next('close2');
+    this.appService.popup.next('recovery');
   }
 }

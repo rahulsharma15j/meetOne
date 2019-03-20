@@ -94,6 +94,7 @@ public authToken: any;
 public allMeetings: any;
 public receiverId: any;
 public receiverName: any;
+public userInfo:any;
    
 constructor(private modal: NgbModal,
   public socketService:SocketService,
@@ -107,9 +108,15 @@ constructor(private modal: NgbModal,
     this.receiverId = Cookie.get('receiverId');
     this.receiverName = Cookie.get('receiverName');
     this.authToken = Cookie.get('authToken');
-    this.verifyUserUsingSocket();
-    this.getMeetingsOfUser(this.receiverName,this.receiverId);
-    this.handleSocketAuthError();
+    this.userInfo = this.appService.getUserInfoFromLocalStorage();
+    if(this.userInfo.userType === 'normal'){
+      this.verifyUserUsingSocket();
+      this.getMeetingsOfUser(this.receiverName,this.receiverId);
+      this.handleSocketAuthError();
+    }else{
+      this.router.navigate(['/dashboard/admin']);
+    }
+    
   }
 //User utility functions starts.
 /**

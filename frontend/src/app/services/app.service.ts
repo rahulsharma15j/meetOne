@@ -10,6 +10,7 @@ export class AppService {
   public baseUrl : string = "http://localhost:3000/api/v1";
   public popup: Subject<any> = new Subject<any>();
 
+  public userType : any = ''; 
   public passwordRegex = /^[A-Za-z0-9]\w{7,}$/;
   public userNameRegex = /^[a-zA-Z0-9\@\-\_]{8,}$/;
   public emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -66,7 +67,7 @@ export class AppService {
   public resetPassword(data): Observable<any>{
     const params = new HttpParams()
       .set('email', data.email)
-    return this.http.post(`${this.baseUrl}/users/reset`, params);
+    return this.http.post(`${this.baseUrl}/users/reset-password`, params);
   } 
 
   public verifyUser(userId): Observable<any>{

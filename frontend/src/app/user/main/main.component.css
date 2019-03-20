@@ -86,7 +86,7 @@
 
 .line {
     border-left: 3px solid green;
-    height: 400px;
+    height: inherit;
     margin-left: 2.5%;
   }
 

@@ -69,6 +69,7 @@
     right:0;
     position: absolute;
     overflow-y: scroll ;
+    background-color: rgb(239, 243, 242); 
 }
 
 .search{
@@ -122,16 +123,39 @@
     font-size: 20px;
 }
   
-   
- 
+.online{
+    background-color: green;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}   
+
+.offline{
+    background-color: red;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+} 
+
 .h5{
     text-align: center;
 }
 
 .list{
     text-align: start;
-    padding: 5%;
-    border: 1px solid black;
+    padding-left:10%;
+    padding-right: 10%;
+    font-size: 1rem; 
+    background-color: white;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+.list:hover{
+    background-color: rgba(196, 230, 240, 0.952);
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
  
  
@@ -184,7 +208,38 @@ h3 {
 
  
 
- 
+.navbar-brand{
+    margin-left: 3%;
+}
+
+ul{
+    margin-right: 3%;
+}
+
+nav .navbar-nav li a{
+    color: white !important;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.title{
+    font-family: 'Source Sans Pro',sans-serif;
+    position: absolute;
+    top:50%;
+    left:28%;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color:mintcream;
+   
+}
+
+.navbar{
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+} 
 
  
 
