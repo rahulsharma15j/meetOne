@@ -42,12 +42,6 @@ export class MainComponent implements OnInit,OnDestroy  {
   ngOnInit() {
   }
 
-  ngOnDestroy(): void {
-    
-  }
-   
-  
-
   onClick(){
    this.router.navigate(['/']);
   }

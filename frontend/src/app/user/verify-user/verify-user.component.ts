@@ -35,13 +35,9 @@ export class VerifyUserComponent implements OnInit {
             this.toastr.warning(`${response.message}`);
           }
      },(err)=>{
-         if(err.status === 404){
-            this.toastr.error('USER VERIFICATION FAILED');
-         }else{
-            this.toastr.error('INTERNAL SERVER ERROR');
-            this.router.navigate(['/error']);
-         }
-     });
+          this.toastr.error('INTERNAL SERVER ERROR');
+          this.router.navigate(['/error']);
+      });
   }
 
 }

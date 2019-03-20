@@ -41,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
       }
       
       this.appService.updatePassword(password).subscribe((response)=>{
-        console.log(response);
+      
          if(response.status === 200){
              this.toastr.success('PASSWORD UPDATED SUCCESSFULL');
           }else{
@@ -49,12 +49,8 @@ export class ResetPasswordComponent implements OnInit {
           }
       },
       (err)=>{
-        if(err.status === 404){
-          this.toastr.error('FAILED TO RESET PASSWORD');
-        }else{
-          this.toastr.error('INTERNAL SERVER ERROR');
-          this.router.navigate(['/error']);
-        }
+        this.toastr.error('INTERNAL SERVER ERROR');
+        this.router.navigate(['/error']);
       });
     }
   }

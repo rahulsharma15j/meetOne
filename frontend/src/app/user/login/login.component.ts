@@ -72,8 +72,7 @@ export class LoginComponent implements OnInit {
   }
 
   public modalClose():any{
-    console.log('modal close called.');
-    this.appService.popup.next('logIn');
+     this.appService.popup.next('logIn');
   }
    
 

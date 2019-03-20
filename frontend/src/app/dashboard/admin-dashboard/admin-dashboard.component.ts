@@ -216,10 +216,8 @@ public getMeetings(userName,userId):any{
 }
 
 public logOutUser():any{
-  console.log('logout called');
-  this.appService.logOut(this.authToken).subscribe((response)=>{
-    console.log(response);
-    if(response.status === 200){
+   this.appService.logOut(this.authToken).subscribe((response)=>{
+     if(response.status === 200){
       
       localStorage.clear();
        Cookie.delete('receiverId');
@@ -243,14 +241,11 @@ public logOutUser():any{
  */
 
 public getOnlineUsers():any{
-  console.log('all online users');
-  this.socketService.onlineUsersList().subscribe((usersList)=>{
-    console.log(usersList);
-    for(let user in usersList){
+   this.socketService.onlineUsersList().subscribe((usersList)=>{
+     for(let user in usersList){
        this.allOnlineUsersList.push(user);
     }
-    console.log(this.allOnlineUsersList);
-    this.allUsersList.forEach((user)=>{
+     this.allUsersList.forEach((user)=>{
       (this.allOnlineUsersList.includes(user.userId))? user.status = 'online':user.status = 'offline';
     });
 

@@ -30,20 +30,16 @@ export class ForgotPasswordComponent implements OnInit {
       }
       this.appService.resetPassword(reset).subscribe((response)=>{
          if(response.status === 200){
-           this.toastr.success('PASSWORD RECOVERY EMAIL SENT');
-           this.modalClose();
-         }else{
+          this.modalClose();
+          this.toastr.success('PASSWORD RECOVERY EMAIL SENT');
+        }else{
           this.toastr.error(`${response.message}`);
           this.isProcessing = false;
         }
       },(err)=>{
-        if(err.status === 404){
-          this.toastr.warning('EMAIL IS NOT REGISTERED WITH US');
-          this.isProcessing = false;
-        }else{
-          this.toastr.error('INTERNAL SERVER ERROR');
-          this.router.navigate(['/error']);
-        }
+        this.toastr.error('INTERNAL SERVER ERROR');
+        this.router.navigate(['/error']);
+        
       });
     }
   }
@@ -51,7 +47,6 @@ export class ForgotPasswordComponent implements OnInit {
 
 
   public modalClose():any{
-    console.log('modal close called.');
-    this.appService.popup.next('recovery');
+     this.appService.popup.next('recovery');
   }
 }

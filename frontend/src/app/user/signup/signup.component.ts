@@ -42,7 +42,6 @@ export class SignupComponent implements OnInit {
 
   public createCountryList():any{
     this.appService.getCountryNames().subscribe((response)=>{
-      console.log(response);
       Object.keys(response).forEach((key)=>{
            this.countriesList.push({
              name: response[key],
@@ -53,7 +52,6 @@ export class SignupComponent implements OnInit {
       this.countriesList.sort((country1,country2)=>{
          return (country1.name.toLowerCase() > country2.name.toLowerCase())? 1 : -1;
       });
-      console.log(this.countriesList);
     });
   }
 
@@ -62,10 +60,8 @@ export class SignupComponent implements OnInit {
     this.countriesList.filter((obj)=> obj['code'] == code? this.countryCode = obj.phone:'');
   }
   
-
   public createUser():any{
     if(!this.firstName){
-      console.log('hi');
       this.toastr.warning('PLEASE ENTER FIRST NAME');
     }else if(!this.lastName){
       this.toastr.warning('PLEASE ENTER LAST NAME');
@@ -96,13 +92,10 @@ export class SignupComponent implements OnInit {
         mobile: this.countryCode + this.mobile,
         password:this.password
       }
-      console.log(newUserObj);
       this.appService.signUp(newUserObj).subscribe((response)=>{
          if(response.status === 200){
-           
-           this.toastr.success('Please check your email','SUCCESS');
-           this.modalClose();
-         
+          this.modalClose();
+          this.toastr.success('Please check your email','SUCCESS');
           }else{
           this.toastr.warning(`${response.message}`,'ERROR');
          }
@@ -112,9 +105,7 @@ export class SignupComponent implements OnInit {
     }
   }
  
-
   public modalClose():any{
-    console.log('modal close called.');
     this.appService.popup.next('signUp');
   }
   

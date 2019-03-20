@@ -35,9 +35,9 @@ import { AppRouteGuard } from '../services/app-route.guard';
       useFactory: adapterFactory
     }),
     RouterModule.forChild([
-      { path: 'dashboard/user',component:UserDashboardComponent,canActivate:[AppRouteGuard,UserRouteGuard]},
+      { path: 'dashboard/user',component:UserDashboardComponent,canActivate:[AppRouteGuard]},
       {path:'dashboard/admin',component:AdminDashboardComponent,
-      canActivate:[AppRouteGuard,AdminRouteGuard],
+      canActivate:[AppRouteGuard],
       children:[
         {path:'',component:CreateMeetingComponent},
       ]

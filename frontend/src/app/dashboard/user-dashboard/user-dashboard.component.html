@@ -1,4 +1,25 @@
-<app-nav></app-nav>
+<!--Nav bar for admin dashboard-->
+<nav class="navbar navbar-expand-sm bg-info navbar-dark">
+  <a class="navbar-brand" href="" (click)='onClickOnLink($event)'><h3>MeetOne</h3></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navItems">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navItems">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item ml-auto">
+                <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ receiverName }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button class="dropdown-item" type="button">Profile</button>
+                  <button class="dropdown-item" type="button" (click)="logOutUser()">Logout</button>
+                </div>
+              </div></li>
+          </ul>
+      </div>
+</nav>
+<!--Nav bar ends-->
 <div class="parent-div">
    <div class="row my-row">
    <div class="calender-div">
@@ -15,7 +36,7 @@
                 </div>
                 <div
                   class="btn btn-primary"
-                  (click)="view = CalendarView.Week"
+                  (click)=" view = CalendarView.Week"
                   [class.active]="view === CalendarView.Week"
                 >
                   Week
