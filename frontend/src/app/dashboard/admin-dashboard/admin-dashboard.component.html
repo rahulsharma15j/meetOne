@@ -138,11 +138,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <router-outlet></router-outlet>
+        <router-outlet name="create"></router-outlet>
       </div>
     </div>
   </div>
 </div><!-- Modal to handle create meeting ends --> 
+
+<!-- Modal to handle update meeting starts -->
+<div class="modal fade" #closeModal id="myModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Create Meeting for {{ user.firstName }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <router-outlet name="update"></router-outlet>
+      </div>
+    </div>
+  </div>
+</div><!-- Modal to handle update meeting ends --> 
 
 
 <!-------------------------------------------------------->
@@ -157,31 +174,37 @@
       <div class="parent">
           <div class="form">
               <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-4 col-form-label">Subject:</label>
-                    <div class="col-sm-6">{{ modalData?.event.subject }}               
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Subject:</label>
+                    <div class="col-sm-6 mt">{{ modalData?.event.subject }}               
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label">Description:</label>
-                    <div class="col-sm-6">{{ modalData?.event.description }}</div>
+                    <div class="col-sm-6 mt">{{ modalData?.event.description }}</div>
                   </div>
                   <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">StartTime:</label>
-                        <div class="col-sm-6">{{ modalData?.event.start | date:'medium'}}</div>
+                        <div class="col-sm-6 mt">{{ modalData?.event.start | date:'medium'}}</div>
                       </div>
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-2 col-form-label">EndTime:</label>
-                          <div class="col-sm-6">{{ modalData?.event.end | date:'medium'}}</div>
+                          <div class="col-sm-6 mt">{{ modalData?.event.end | date:'medium'}}</div>
                         </div>
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Location:</label>
-                            <div class="col-sm-6">{{ modalData?.event.location }}</div>
+                            <div class="col-sm-6 mt">{{ modalData?.event.location }}</div>
                           </div>
                           <div class="form-group row">
                               <label for="inputEmail3" class="col-sm-2 col-form-label">Created by:</label>
-                              <div class="col-sm-6">{{ modalData?.event.adminName }}</div>
+                              <div class="col-sm-6 mt">{{ modalData?.event.adminName }}</div>
                             </div>
                           </div>
+                          
+                          <div class="col-md-4 btn btn-info btn-sm custom-btn update-btn" (click)="getMeetingOnClick()" data-toggle="modal" 
+                          data-target="#myModalUpdate">Update</div>
+                          <div class="col-md-4  btn btn-danger btn-sm custom-btn delete-btn" (click)="showModal()" data-toggle="modal" 
+                          data-target="#myModal">Delete</div>
+                        
         </div> 
   </div>
   <!-------------------------------------------------------->
@@ -215,8 +238,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <h6 class="card-title">Are you sure you want to delete the following meeting?</h6>
-        <h4 class="card-title">{{modalData?.event.meetingTopic}}</h4>
+        <h6 class="card-title">Are you sure you want to delete the meeting?</h6>
+        <h4 class="card-title">{{modalData?.event.meetingSubject}}</h4>
       </div>
     
       <div class="modal-footer">

@@ -39,7 +39,8 @@ import { AppRouteGuard } from '../services/app-route.guard';
       {path:'dashboard/admin',component:AdminDashboardComponent,
       canActivate:[AppRouteGuard],
       children:[
-        {path:'',component:CreateMeetingComponent},
+        {path:'',outlet:'create',component:CreateMeetingComponent},
+        {path:'',outlet:'update',component:UpdateMeetingComponent}
       ]
     }
     ]),

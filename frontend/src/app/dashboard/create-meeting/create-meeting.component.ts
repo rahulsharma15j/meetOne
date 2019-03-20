@@ -30,8 +30,7 @@ export class CreateMeetingComponent implements OnInit{
       public meetingService:MeetingService,
       public socketService:SocketService,
       public appService:AppService) { 
-      console.log('meeting called.');
-    }
+     }
     
     ngOnInit() {
     
@@ -41,8 +40,6 @@ export class CreateMeetingComponent implements OnInit{
       this.adminName = Cookie.get('receiverName');
       this.meetingService.currentUser.subscribe(user=>{
         this.user = user
-        console.log(this.user);
-         
       });
        
       }

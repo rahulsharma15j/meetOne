@@ -1,4 +1,4 @@
-import { Component,ViewChild,TemplateRef,OnInit, ChangeDetectionStrategy, ElementRef  } from '@angular/core';
+import { Component,ViewChild,TemplateRef,OnInit, ChangeDetectionStrategy, ElementRef, OnChanges  } from '@angular/core';
 import { startOfDay,endOfDay,subDays,addDays,endOfMonth,isSameDay,isSameMonth,addHours } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -37,6 +37,7 @@ export class AdminDashboardComponent implements OnInit {
   view: string = 'month';
   CalendarView = CalendarView;
   viewDate: Date = new Date();
+  public meetingToUpdate: any;
   modalData: {
     action: string;
     event: CalendarEvent;
@@ -84,6 +85,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
+    this.meetingToUpdate = event;
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
   }
@@ -95,7 +97,7 @@ export class AdminDashboardComponent implements OnInit {
   @ViewChild('closeModal') closeModal: ElementRef;
   public userName: any;
   public userId: any;
-  public activeDayIsOpen: boolean = true;
+  public activeDayIsOpen: boolean = false;
   public receiverName: any;
   public receiverId: any;
   public authToken: any;
@@ -129,13 +131,22 @@ ngOnInit() {
     this.appService.popup.subscribe((val)=>{
       if(val == 'close'){
         this.closeModal.nativeElement.click();
-      } 
+      }else if(val == 'close2'){
+        this.closeModal.nativeElement.click();
+        setTimeout(() => {
+          this.getMeegtingsOfAdmin();
+        }, 500);
+      }  
   });
  }else{
    this.router.navigate(['/dashboard/user']);
  }
 }
 
+ 
+
+
+ 
 public getMeegtingsOfAdmin():any{
   this.events = [];
   this.getMeetings(this.adminName,this.adminId);
@@ -150,6 +161,11 @@ public getUserOnClick(user):any{
   this.getMeetings(`${user.firstName} ${user.lastName}`,user.userId);
 }
 
+public getMeetingOnClick():any{
+  this.meetingService.getMeetingOnClickUpdate(this.meetingToUpdate);
+  this.modal.dismissAll();
+}
+
 public getAllUsersForAdmin():any{
   this.appService.getAllUsers(this.authToken).subscribe((response)=>{
     if(response.status === 200){
@@ -162,6 +178,8 @@ public getAllUsersForAdmin():any{
       this.router.navigate(['/error']);
   });
 }
+
+ 
 
 
 public deleteUserMeeting(meeting):any{
@@ -218,7 +236,6 @@ public getMeetings(userName,userId):any{
 public logOutUser():any{
    this.appService.logOut(this.authToken).subscribe((response)=>{
      if(response.status === 200){
-      
       localStorage.clear();
        Cookie.delete('receiverId');
        Cookie.delete('receiverName');

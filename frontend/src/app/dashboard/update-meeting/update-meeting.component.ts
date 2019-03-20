@@ -5,6 +5,7 @@ import { MeetingService } from 'src/app/services/meeting.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { Cookie } from 'ng2-cookies';
 import { UserModule } from 'src/app/user/user.module';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-update-meeting',
@@ -27,12 +28,14 @@ export class UpdateMeetingComponent implements OnInit {
   public subject: any;
   public location: any;
   public userName: any;
+  public meeting: any;
    
 
   constructor(private router: Router,
     private toastr:ToastrService,
     public meetingService:MeetingService,
-    public socketService:SocketService) { 
+    public socketService:SocketService,
+    public appService: AppService) { 
     console.log('meeting called.');
   }
 
@@ -41,10 +44,23 @@ export class UpdateMeetingComponent implements OnInit {
     this.receiverName = Cookie.get('receiverName');
     this.authToken = Cookie.get('authToken');
     this.adminName = Cookie.get('receiverName');
+    this.meetingService.update.subscribe((meeting)=>{
+      console.log(meeting);
+       this.meeting = meeting;
+       this.subject = this.meeting.subject;
+       this.description = this.meeting.description;
+       this.startingDate = this.meeting.startDate;
+       this.endingDate = this.meeting.endDate;
+       this.adminName = this.meeting.adminName;
+       this.location = this.meeting.location;
+    });
+
+   
+     
   }
 
   public updateUserMeeting(): any {
-    if (!this.meetingSubject) {
+    if (!this.subject) {
       this.toastr.warning("PLEASE ENTER MEETING SUBJECT");
     }
     else if (!this.description) {
@@ -55,7 +71,7 @@ export class UpdateMeetingComponent implements OnInit {
     else if (!this.endingDate) {
       this.toastr.warning("PLEASE ENTER MEETING END DATE");
     }
-    else if (!this.meetingLocation) {
+    else if (!this.location) {
       this.toastr.warning("PLEASE ENTER MEETING LOCATION");
     }
     else if (this.meetingService.checkStartDateAndEndDate(this.startingDate ,this.endingDate)) {
@@ -67,22 +83,27 @@ export class UpdateMeetingComponent implements OnInit {
     }
     else {
       let meeting = {
-        meetingId:this.meetingId,
-        subject: this.meetingSubject,
+        meetingId:this.meeting.meetingId,
+        subject: this.subject,
         startDate:this.startingDate.getTime(),
         description:this.description,
         endDate:this.endingDate.getTime(),
-        location:this.meetingLocation
+        location:this.location,
+        authToken: this.authToken
       }
      this.meetingService.updateMeeting(meeting)
      .subscribe((response) => {
+       console.log(response);
         if(response.status == 200) {
-            let notification = {
-              userId: this.userMeeting.userId,
-              message:`Admin ${this.userMeeting.adminName} updated meeting ${this.userMeeting.subject}.`
-            }
-            this.sendMeetingUpdateNotification(notification);
-            this.toastr.success('MEETING UPDATED SUCCESSFULLY');
+          this.modalClose();
+           this.sendMeetingUpdateNotification({
+              userId: this.meeting.userId,
+              message:`Admin ${this.meeting.adminName} updated meeting ${this.meeting.subject}.`
+            });
+            setTimeout(()=>{
+              this.toastr.success(response.message.toUpperCase());
+            },1500);
+            
         }
           else {
             this.toastr.warning(`${response.message}`);
@@ -124,5 +145,9 @@ export class UpdateMeetingComponent implements OnInit {
       }
     );
   }
+
+  public modalClose():any{
+    this.appService.popup.next('close2');
+ }
 
 }

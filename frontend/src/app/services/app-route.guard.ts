@@ -9,8 +9,7 @@ export class AppRouteGuard implements CanActivate {
   constructor(private router:Router){}
   
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    console.log(Cookie.get('authToken'));
-     if(Cookie.get('authToken') === undefined ||
+    if(Cookie.get('authToken') === undefined ||
         Cookie.get('authToken') ===  null ||
         Cookie.get('authToken') ===  ''){
         this.router.navigate(['/']);

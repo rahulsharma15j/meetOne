@@ -143,6 +143,22 @@
     text-align: center;
 }
 
+ 
+.mt{
+    padding-top: 1%;
+    
+}
+
+
+.update-btn{
+    margin-left: 59%;
+    width:20%;
+}
+.delete-btn{
+    margin-left: 1%;
+    width:20%;
+}
+
 .list{
     text-align: start;
     padding-left:10%;

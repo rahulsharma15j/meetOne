@@ -11,7 +11,7 @@ declare var jQuery:any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit,OnDestroy  {
+export class MainComponent implements OnInit {
  
   
   @ViewChild('closeModal') closeModal: ElementRef;

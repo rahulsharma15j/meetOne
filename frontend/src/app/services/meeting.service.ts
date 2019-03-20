@@ -13,12 +13,19 @@ export class MeetingService {
   private user = new BehaviorSubject('');
   currentUser = this.user.asObservable();
 
+  private meeting = new BehaviorSubject('');
+  update = this.meeting.asObservable();
+
   constructor(private http:HttpClient) { }
 
   public changeUser(user:any):any{
     console.log('change user calleds');
     console.log(user);
     this.user.next(user);
+  }
+
+  public getMeetingOnClickUpdate(meeting:any):any{
+    this.meeting.next(meeting);
   }
 
   public checkStartDateAndEndDate(startingDate:any,endingDate:any):boolean{
@@ -68,12 +75,13 @@ export class MeetingService {
 
   public updateMeeting(data):Observable<any>{
    const params = new HttpParams()
-    .set('subject', data.meetingTopic)
-    .set('startDate',data.meetingStartDate)
-    .set('endDate',data.meetingEndDate)
-    .set('description',data.meetingDescription)
-    .set('location',data.meetingPlace)
+   .set('meetingId', data.meetingId)
+    .set('subject', data.subject)
+    .set('startDate',data.startDate)
+    .set('endDate',data.endDate)
+    .set('description',data.description)
+    .set('location',data.location)
     .set('authToken',data.authToken);
-    return this.http.post(`${this.baseUrl}/meetings/update`,params);
+    return this.http.put(`${this.baseUrl}/meetings/update`,params);
   }
 }
