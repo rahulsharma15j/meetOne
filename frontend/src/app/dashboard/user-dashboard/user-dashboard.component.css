@@ -18,6 +18,11 @@
       
      background-color: white;
   }
+
+  .update-btn{
+    margin-left: 80%;
+    width:20%;
+}
  
  .cal{
      padding: 1%;

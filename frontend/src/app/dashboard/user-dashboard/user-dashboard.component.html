@@ -86,41 +86,19 @@
               </div>
               <!--nav-->
               
+              <!--Calendar view-->
               <div [ngSwitch]="view" id="cal-view">
-                 <mwl-calendar-month-view  
-                  *ngSwitchCase="CalendarView.Month"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  [refresh]="refresh"
-                  [activeDayIsOpen]="activeDayIsOpen"
-                  (dayClicked)="dayClicked($event.day)"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
-                >
-                </mwl-calendar-month-view>
-                
-                <mwl-calendar-week-view
-                  *ngSwitchCase="CalendarView.Week"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
-                >
+                <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="viewDate = $event.day.date; view = 'day'" 
+                (eventClicked)="handleEvent('Clicked',$event.event)" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-month-view>
+                <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" 
+                (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'" [refresh]="refresh"
+                (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
                 </mwl-calendar-week-view>
-              
-              
-                <mwl-calendar-day-view
-                  *ngSwitchCase="CalendarView.Day"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
-                >
-                </mwl-calendar-day-view>
-              
-              </div>
+                <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+              </mwl-calendar-day-view>
+            </div><!--Calendar view ends-->
             
 
           
@@ -129,5 +107,69 @@
 </div><!--div ends-->
 
 </div>
+
+<!-------------------------------------------------------->
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Meeting Details</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="parent">
+          <div class="form">
+              <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Subject:</label>
+                    <div class="col-sm-6 mt">{{ modalData?.event.subject }}               
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Description:</label>
+                    <div class="col-sm-6 mt">{{ modalData?.event.description }}</div>
+                  </div>
+                  <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">StartTime:</label>
+                        <div class="col-sm-6 mt">{{ modalData?.event.start | date:'medium'}}</div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="inputEmail3" class="col-sm-2 col-form-label">EndTime:</label>
+                          <div class="col-sm-6 mt">{{ modalData?.event.end | date:'medium'}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Location:</label>
+                            <div class="col-sm-6 mt">{{ modalData?.event.location }}</div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="inputEmail3" class="col-sm-2 col-form-label">Created by:</label>
+                              <div class="col-sm-6 mt">{{ modalData?.event.adminName }}</div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-4 btn btn-info btn-sm custom-btn update-btn" (click)="getMeetingOnClick()" data-toggle="modal" 
+                          data-target="#myModalUpdate">Close</div>
+                           
+                        
+        </div> 
+  </div>
+  <!-------------------------------------------------------->
+
+  <!--Modal alert-->
+<ng-template #modalReminder let-close="close">
+  <div class="modal-header">
+    <h6 class="modal-title">Meeting Reminder</h6>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="card-title">Hurry Up!! Your meeting <span><i> {{modalData?.event.meetingTopic}} </i></span> is about to start.</h6>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-success" (click)="modalData?.event.remindMe=true;gentleReminder=true;close()">Snooze</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="modalData?.event.remindMe=false;gentleReminder=true;close()">Dismiss</button>
+  </div>
+</ng-template>
 
  
