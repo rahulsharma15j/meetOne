@@ -1,7 +1,7 @@
 const Auth = require('./../models/Auth');
 const logger = require('./../libs/loggerLib');
 const response = require('./../libs/responseLib');
-const token = require('./../libs/generateTokenLib');
+const token = require('./../libs/tokenLib');
 const check = require('./../libs/checkLib');
 
 let isAuthorized = (req, res, next)=>{

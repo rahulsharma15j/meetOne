@@ -14,6 +14,7 @@ let signUp = (req,res)=>{
          || check.isEmpty(req.body.email)
          || check.isEmpty(req.body.userName)
          || check.isEmpty(req.body.mobile)
+         || check.isEmpty(req.body.countryName)
          || check.isEmpty(req.body.password)) {
          console.log('hi');
             reject(response.generate(true,'One or more parameter(s) is missing.',400,null));
@@ -48,9 +49,10 @@ let signUp = (req,res)=>{
 
 /**User verify Function. */
 let verifyUserEmail = (req,res)=>{
+   console.log(req.body.userId);
    let validateParams = ()=>{
       return new Promise((resolve, reject)=>{
-         if(check.isEmpty(req.query.isVerified) || check.isEmpty(req.params.userId)){
+         if(check.isEmpty(req.body.userId)){
            reject(response.generate(true,'Parameter(s) missing.',400,null));
          }else{ resolve(req);}
       });
@@ -72,6 +74,7 @@ let verifyUserEmail = (req,res)=>{
 
 /**User login function. */
 let logIn = (req,res)=>{
+   console.log(req.body);
    let validateParams = ()=>{
       return new Promise((resolve, reject)=>{
          (req.body.email)? loginType = 'email':(req.body.userName)?loginType = 'userName': loginType='invalid';
@@ -168,18 +171,20 @@ let changeUserPassword = (req,res)=>{
  */
 let updateUserPassword = (req,res)=>{
    let validateParams = ()=>{
+       
       return new Promise((resolve, reject)=>{
          if(check.isEmpty(req.body.resetToken)
-         || check.isEmpty(req.body.newPassword)) {
+         || check.isEmpty(req.body.password)
+         || check.isEmpty(req.body.confirm)) {
             reject(response.generate(true,'One or more parameter(s) is missing.',400,null));
       }else{ resolve(req);}
       });
    }
    validateParams(req, res)
    .then(userLib.findUserByToken)
-   .then((userDetails)=>userLib.updatePassword(req, userDetails))
+   .then((userDetails)=>userLib.updatePassword(req,userDetails))
    .then((result)=>{
-      res.send(response.generate(false,'Passwrod updated successfully.',200,null));
+      res.send(response.generate(false,'Password updated successfully.',200,null));
    })
    .catch((err)=>{
       res.send(err);

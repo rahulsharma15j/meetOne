@@ -9,7 +9,7 @@ let sendActivationEmail = (userDetails)=>{
     let subject = 'Email varification.';
     let message = `Hello ${userName},<br><br>Your account has been created, 
                     Please click below link to activate your account:<br><br>
-                    <a href="${appConfig.baseUrl}/activate/${userDetails.userId}">Activate account.</a> `;
+                    <a href="${appConfig.appUrl}/verify/${userDetails.userId}">Activate account.</a> `;
     sendEmail(userDetails.email, subject, message); 
 }
 
@@ -27,7 +27,7 @@ let sendPasswordResetEmail = (userDetails, resetToken)=>{
     let message = `Hello ${fullName},<br><br>This email is sent you to reset your 
                    account password.<br>
                    Please click on the following link to reset your password.
-                   <br><a href="${appConfig.baseUrl}/reset-password/${resetToken}">Reset password</a>`;
+                   <br><a href="${appConfig.appUrl}/reset-password/${resetToken}">Reset password</a>`;
     sendEmail(userDetails.email, subject, message);
 }
 

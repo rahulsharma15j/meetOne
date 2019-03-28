@@ -15,7 +15,7 @@ let setServer = (server)=>{
            console.log('set user called.');
            tokenLib.verifyTokenWithoutSecret(authToken, (err, user)=>{
               if(err){
-                logger.error('auth-error',{ status: 500, error:'Please provide correct authToken.'});
+                socket.emit('auth-error',{ status: 500, error:'Please provide correct authToken.'});
               }else{
                   console.log('user is verifyied setting details.');
                   let currentUser = user.data;
@@ -25,15 +25,17 @@ let setServer = (server)=>{
                   let fullName = `${currentUser.firstName} ${currentUser.lastName}`;
                   let key = currentUser.userId;
                   let value = fullName;
-
+                  
+                  
                   let setUserOnline = redisLib.setNewOnlineUserInHash('OnlineUsers',key,value,(err,result)=>{
                     if(err){
                         logger.error(err.message,'socketLib: setNewOnlineUserInHash().',10);
                     }else{
-                        redisLib.getAllUsersInHash('onlineUsers',(err, result)=>{
+                        redisLib.getAllUsersInHash('OnlineUsers',(err, result)=>{
                             if(err){
                                 logger.error(err.message,'socketLib: getAllUsersInHash().',10);
                             }else{
+                                console.log(fullName + ' is online');
                                 socket.broadcast.emit('online-user-list', result);
                             }
                         });
@@ -45,12 +47,15 @@ let setServer = (server)=>{
 
 
        socket.on('disconnect', ()=>{
+          console.log('disconnect called.');
            if(socket.userId){
+               console.log(socket.userId);
               redisLib.deleteUserFromHash('onlineUsers', socket.userId);
               redisLib.getAllUsersInHash('onlineUsers',(err, result)=>{
                 if(err){
                     logger.error(err.message,'socketLib: getAllUsersInHash().',10);
                 }else{
+                    console.log('users second === ' + result);
                     socket.broadcast.emit('online-user-list', result);
                 }
             });

@@ -25,6 +25,7 @@ let createUser = (req,res)=>{
             email: req.body.email.toLowerCase(),
             userName: req.body.userName,
             mobile: req.body.mobile,
+            country: req.body.countryName,
             password: passwordLib.hashPassword(req.body.password),
             userType: req.body.userName.endsWith('admin') ? 'admin' : 'normal',
             createdOn: time.now()
@@ -52,7 +53,7 @@ let createUser = (req,res)=>{
 
 let verifyEmail = (req)=>{
    return new Promise((resolve,reject)=>{
-      User.findOne({userId:req.params.userId}).exec((err, retrievedUserDetails)=>{
+      User.findOne({'userId':req.body.userId}).exec((err, retrievedUserDetails)=>{
          if(err){
             logger.error(err.message,'userController: verifyUserEmail()/verifyEmail()',10);
             reject(response.generate(true,'Error while finding user.',500,null));
@@ -89,7 +90,7 @@ let findUserByUserName = (req)=>{
           
          }else if(check.isEmpty(retrievedUserDetails)){
             logger.info('User not found.','userController:login()/findUserByUserName()',7);
-            reject(response.generate(true,'User not found.',400,null));
+            reject(response.generate(true,'No User registered with this email.',404,null));
             
          }else if(!check.isEmpty(retrievedUserDetails) && !retrievedUserDetails.isVerified){
             logger.info('User not verified.','userController:login()/findUserByUserName()',7);
@@ -105,7 +106,7 @@ let findUserByUserName = (req)=>{
 
 let findUserById = (req)=>{
    return new Promise((resolve,reject)=>{
-      User.findOne({'userId':req.user.userId})
+      User.findOne({'userId':req.params.userId})
       .select('-_id -__v').exec((err, retrievedUserDetails)=>{
          if(err){
             logger.error(err.message,'userController: updatePassword()/findUserById()',10);
@@ -127,7 +128,6 @@ let findUserById = (req)=>{
 
 let findUserByToken = (req)=>{
    return new Promise((resolve,reject)=>{
-      console.log(req.body.resetToken);
       User.findOne({'resetToken':req.body.resetToken})
       .select('-_id -__v').exec((err, retrievedUserDetails)=>{
          if(err){
@@ -135,7 +135,7 @@ let findUserByToken = (req)=>{
             reject(response.generate(true,'Error while finding user.',500,null));
          }else if(check.isEmpty(retrievedUserDetails)){
             logger.info('User not found.','userController:updatePassword()/findUserById()',7);
-            reject(response.generate(true,'User not found.',400,null));
+            reject(response.generate(true,'Password Reset Link expired.',404,null));
              
          }else if(!check.isEmpty(retrievedUserDetails) && !retrievedUserDetails.isVerified){
             logger.info('User not verified.','userController: updatePassword()/findUserById()',7);
@@ -256,7 +256,7 @@ let deleteToken = (req,res)=>{
 
 let getAll = (skip = 1)=>{
    return new Promise((resolve, reject)=>{
-      User.find({ $and : [ { isVerified: true } , { userType:'normal' } ]})
+      User.find({ isVerified: true })
       .select('-_id -__v -password')
       .skip((parseInt(skip - 1) * 10))
       .limit(10)
@@ -293,14 +293,16 @@ let getUser = (req)=>{
 }
 
 /**Funtion to update user password. */
-let updatePassword = (req, userDetails)=>{
+let updatePassword = (req,userDetails)=>{
    return new Promise((resolve,reject)=>{
-      let updateQuery = {
-            password: passwordLib.hashPassword(req.body.newPassword), 
+      
+      if(req.body.password === req.body.confirm){
+         let updateQuery = {
+            password: passwordLib.hashPassword(req.body.password), 
             resetToken : undefined,
             resetTokenExpires : undefined,
       }
-      Object.keys(updateQuery).forEach((key)=> key === undefined? delete obj[key]:'');
+       
       User.updateOne( { 'userId':userDetails.userId }, updateQuery)
          .exec((err, result)=>{
             if(err){
@@ -315,6 +317,11 @@ let updatePassword = (req, userDetails)=>{
               resolve(result); 
             }
          })
+      }else{
+         logger.info('Password does not matches.','userController: updatePassword()',7);
+         reject(response.generate(true,'Password does not matches.',404,null)); 
+      }
+      
    });
 }
 

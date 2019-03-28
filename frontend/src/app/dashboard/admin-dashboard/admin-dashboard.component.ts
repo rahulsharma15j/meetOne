@@ -203,6 +203,13 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
 
+  deleteEvent(event: any): void {
+    this.deleteUserMeeting(event);
+    this.events = this.events.filter(eve => eve !== event);
+    this.refresh.next();
+    this.activeDayIsOpen = false;
+  }
+
   public deleteUserMeeting(meeting): any {
     this.meetingService
       .deleteMeeting(this.authToken, meeting.meetingId)

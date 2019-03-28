@@ -46,16 +46,13 @@ export class UpdateMeetingComponent implements OnInit {
     this.authToken = Cookie.get("authToken");
     this.adminName = Cookie.get("receiverName");
     this.meetingService.update.subscribe(meeting => {
-      console.log("Inside update meeting on Init");
-      console.log(meeting);
       this.meeting = meeting;
       this.subject = this.meeting.subject;
       this.description = this.meeting.description;
-      this.startingDate = new Date(this.meeting.startDate);
-      this.endingDate = new Date(this.meeting.endDate);
+      this.startingDate = this.meeting.startDate;
+      this.endingDate = this.meeting.endDate;
       this.adminName = this.meeting.adminName;
       this.location = this.meeting.location;
-      console.log(this.startingDate);
     });
   }
 
@@ -83,15 +80,18 @@ export class UpdateMeetingComponent implements OnInit {
     ) {
       this.toastr.warning("ENTERD TIME HAS BEEN PASSED");
     } else {
+      console.log(new Date(this.startingDate));
+
       let meeting = {
         meetingId: this.meeting.meetingId,
         subject: this.subject,
-        startDate: this.startingDate.getTime(),
+        startDate: new Date(this.startingDate).getTime(),
         description: this.description,
-        endDate: this.endingDate.getTime(),
+        endDate: new Date(this.endingDate).getTime(),
         location: this.location,
         authToken: this.authToken
       };
+
       this.meetingService.updateMeeting(meeting).subscribe(
         response => {
           if (response.status == 200) {
@@ -126,6 +126,7 @@ export class UpdateMeetingComponent implements OnInit {
       response => {
         if (response.status == 200) {
           this.userMeeting = response.data;
+          console.log(this.userMeeting);
           this.toastr.info("USER MEETING FOUND");
 
           this.userId = this.userMeeting.userId;

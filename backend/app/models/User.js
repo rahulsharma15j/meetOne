@@ -39,7 +39,6 @@ const UserSchema = new Schema({
     },
     userType:{
         type:String,
-        required:true,
         default:'normal'
     },
     isVerified:{
@@ -52,7 +51,7 @@ const UserSchema = new Schema({
     },
     resetTokenExpires:{
         type:Date,
-        default:time.now()
+        default:''
     },
     createdOn:{
         type:Date,

@@ -1,139 +1,268 @@
 <!--Nav bar for admin dashboard-->
 <nav class="navbar navbar-expand-sm bg-info navbar-dark">
-  <a class="navbar-brand" href="" (click)='onClickOnLink($event)'><h3>MeetOne</h3></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navItems">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navItems">
-          <ul class="navbar-nav ml-auto">
-              <li class="nav-item ml-auto"><a class="nav-link" (click)='getMeegtingsOfAdmin()' data-toggle="modal" data-target="#exampleModalCenter">My Meetings</a></li>
-                <li class="nav-item ml-auto">
-                <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ adminName }}
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                  <button class="dropdown-item" type="button">Profile</button>
-                  <button class="dropdown-item" type="button" (click)="logOutUser()">Logout</button>
-                </div>
-              </div></li>
-          </ul>
-      </div>
+  <a class="navbar-brand" href="" (click)="onClickOnLink($event)"
+    ><h3>MeetOne</h3></a
+  >
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navItems"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navItems">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item ml-auto">
+        <a
+          class="nav-link"
+          (click)="getMeegtingsOfAdmin()"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+          >My Meetings</a
+        >
+      </li>
+      <li class="nav-item ml-auto">
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn btn-secondary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {{ adminName }}
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <button class="dropdown-item" type="button">Profile</button>
+            <button class="dropdown-item" type="button" (click)="logOutUser()">
+              Logout
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </nav>
 <!--Nav bar ends-->
 
 <div class="parent-div">
-
   <!--User list for small screen-->
-    <div class="accordion my-accord panel" id="user-list">
-      <div class="card">
-        <div class="card-header user-btn" id="listHeading">
-           <div data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               <h5>Users list</h5>
-           </div>
-        </div>
-    
-        <div id="collapseOne" class="collapse hide" aria-labelledby="listHeading" data-parent="#user-list">
-          <div class="card-body my-card">
-            <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
-              <a  (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
-                <span>{{user.firstName}} {{user.lastName}}<br>
-                 {{user.email}}</span>
-              </a>
-              </div>
-           </div>
+  <div class="accordion my-accord panel" id="user-list">
+    <div class="card">
+      <div class="card-header user-btn" id="listHeading">
+        <div
+          data-toggle="collapse"
+          data-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          <h5>Users list</h5>
         </div>
       </div>
-    </div><!--user for small screen list ends-->
 
-   <div class="row my-row">
-   <div class="calender-div">
-      <div class="row text-center cal">
-          <!--Display current date,day-->
-          <div class="col-md-3">
-              <h3 id="date">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-          </div> 
-
-          <!--Toggle between month , day ,week-->
-          <div class="col-md-3 cal-item">
-              <div class="btn-group btn-group-sm">
-                <div class="btn btn-primary custom-btn" (click)="view = CalendarView.Month" 
-                [class.active]="view === CalendarView.Month">Month</div>
-
-                <div class="btn btn-primary" (click)="view = CalendarView.Week" 
-                [class.active]="view === CalendarView.Week">Week</div>
-
-                <div class="btn btn-primary custom-btn" (click)="view = CalendarView.Day" 
-                [class.active]="view === CalendarView.Day">Day</div>
-              </div>
-            </div> <!--Toggle between month , day ,week-->
-                
- 
-              <!-- Button to trigger create meeting modal -->
-               <div class="col-md-3 cal-item">
-                  <div class="btn btn-primary btn-sm custom-btn" (click)="showModal()" data-toggle="modal" 
-                  data-target="#myModal">Create new meeting</div>
-                </div><!--Create meeting button ends-->
-               
-                <!--Left and right arrow starts-->
-                <div class="col-md-3 cal-item">
-                    <div class="btn-group btn-group-sm">
-                      <div class="left" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" 
-                      (viewDateChange)="activeDayIsOpen = false"></div>
-                      <div class="btn btn-primary custom-btn" mwlCalendarToday [(viewDate)]="viewDate">
-                        Today
-                      </div>
-                      <div class="right" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" 
-                      (viewDateChange)="activeDayIsOpen = false"></div>
-                    </div>
-                  </div><!--Left and right arrow ends-->
-                  <h6 style="text-align:center">Calender view for {{ selectedUser }}</h6>
-              </div>
-              <!--nav-->
-              
-              <!--Calendar view-->
-              <div [ngSwitch]="view" id="cal-view">
-                  <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-                  [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="viewDate = $event.day.date; view = 'day'" 
-                  (eventClicked)="handleEvent('Clicked',$event.event)" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-month-view>
-                  <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" 
-                  (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'" [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-                  </mwl-calendar-week-view>
-                  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-                </mwl-calendar-day-view>
-              </div><!--Calendar view ends-->
-            </div><!--end row-->
-
-        <!--Users List-->    
-        <div class="user-list">
-          <h5>Users List</h5>
-          <div class="search ">
-            <input class="form-control" type="text" [(ngModel)]="userName" placeholder="Search user.." aria-label="search">
-          </div >
-          <div class="border-list">
-          <div class="list" style="cursor:pointer;" *ngFor = 'let user of allUsersList' >
-            <a  (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
-              <span>{{user.firstName}} {{user.lastName}}<br>
-               {{user.email}}</span>
-              <span *ngIf="user.status == online"><i class="online"></i></span>
-              <span *ngIf="user.status != online"><i class="offline"></i></span>
+      <div
+        id="collapseOne"
+        class="collapse hide"
+        aria-labelledby="listHeading"
+        data-parent="#user-list"
+      >
+        <div class="card-body my-card">
+          <div
+            class="list"
+            style="cursor:pointer;"
+            *ngFor="let user of allUsersList"
+          >
+            <a (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
+              <span
+                >{{ user.firstName }} {{ user.lastName }}<br />
+                {{ user.email }}</span
+              >
             </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--user for small screen list ends-->
+
+  <div class="row my-row">
+    <div class="calender-div">
+      <div class="row text-center cal">
+        <!--Display current date,day-->
+        <div class="col-md-3">
+          <h3 id="date">
+            {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
+          </h3>
+        </div>
+
+        <!--Toggle between month , day ,week-->
+        <div class="col-md-3 cal-item">
+          <div class="btn-group btn-group-sm">
+            <div
+              class="btn btn-primary custom-btn"
+              (click)="view = CalendarView.Month"
+              [class.active]="view === CalendarView.Month"
+            >
+              Month
+            </div>
+
+            <div
+              class="btn btn-primary"
+              (click)="view = CalendarView.Week"
+              [class.active]="view === CalendarView.Week"
+            >
+              Week
+            </div>
+
+            <div
+              class="btn btn-primary custom-btn"
+              (click)="view = CalendarView.Day"
+              [class.active]="view === CalendarView.Day"
+            >
+              Day
             </div>
           </div>
-      </div><!--Users list ends-->
+        </div>
+        <!--Toggle between month , day ,week-->
 
-</div><!--div ends-->
+        <!-- Button to trigger create meeting modal -->
+        <div class="col-md-3 cal-item">
+          <div
+            class="btn btn-primary btn-sm custom-btn"
+            (click)="showModal()"
+            data-toggle="modal"
+            data-target="#myModal"
+          >
+            Create new meeting
+          </div>
+        </div>
+        <!--Create meeting button ends-->
+
+        <!--Left and right arrow starts-->
+        <div class="col-md-3 cal-item">
+          <div class="btn-group btn-group-sm">
+            <div
+              class="left"
+              mwlCalendarPreviousView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="activeDayIsOpen = false"
+            ></div>
+            <div
+              class="btn btn-primary custom-btn"
+              mwlCalendarToday
+              [(viewDate)]="viewDate"
+            >
+              Today
+            </div>
+            <div
+              class="right"
+              mwlCalendarNextView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="activeDayIsOpen = false"
+            ></div>
+          </div>
+        </div>
+        <!--Left and right arrow ends-->
+        <h6 style="text-align:center">Calender view for {{ selectedUser }}</h6>
+      </div>
+      <!--nav-->
+
+      <!--Calendar view-->
+      <div [ngSwitch]="view" id="cal-view">
+        <mwl-calendar-month-view
+          *ngSwitchCase="'month'"
+          [viewDate]="viewDate"
+          [events]="events"
+          [refresh]="refresh"
+          [activeDayIsOpen]="activeDayIsOpen"
+          (dayClicked)="viewDate = $event.day.date; view = 'day'"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        ></mwl-calendar-month-view>
+        <mwl-calendar-week-view
+          *ngSwitchCase="'week'"
+          [viewDate]="viewDate"
+          [events]="events"
+          (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          *ngSwitchCase="'day'"
+          [viewDate]="viewDate"
+          [events]="events"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-day-view>
+      </div>
+      <!--Calendar view ends-->
+    </div>
+    <!--end row-->
+
+    <!--Users List-->
+    <div class="user-list">
+      <h5>Users List</h5>
+      <div class="search ">
+        <input
+          class="form-control"
+          type="text"
+          [(ngModel)]="userName"
+          placeholder="Search user.."
+          aria-label="search"
+        />
+      </div>
+      <div class="border-list">
+        <div
+          class="list"
+          style="cursor:pointer;"
+          *ngFor="let user of allUsersList"
+        >
+          <a (click)="getUserOnClick(user)" *ngIf="user.userId != adminId">
+            <span
+              >{{ user.firstName }} {{ user.lastName }}<br />
+              {{ user.email }}</span
+            >
+            <span *ngIf="user.status == online"><i class="online"></i></span>
+            <span *ngIf="user.status != online"><i class="offline"></i></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!--Users list ends-->
+  </div>
+  <!--div ends-->
 </div>
 
- <!-- Modal to handle create meeting starts -->
-<div class="modal fade" #closeModal *ngIf="user" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Modal to handle create meeting starts -->
+<div
+  class="modal fade"
+  #closeModal
+  *ngIf="user"
+  id="myModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Meeting for {{ user.firstName }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+          Create Meeting for {{ user.firstName }}
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -142,15 +271,31 @@
       </div>
     </div>
   </div>
-</div><!-- Modal to handle create meeting ends --> 
+</div>
+<!-- Modal to handle create meeting ends -->
 
 <!-- Modal to handle update meeting starts -->
-<div class="modal fade" #closeModal id="myModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div
+  class="modal fade"
+  #closeModal
+  id="myModalUpdate"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Meeting for {{ user.firstName }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+          Create Meeting for {{ user.firstName }}
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -159,92 +304,119 @@
       </div>
     </div>
   </div>
-</div><!-- Modal to handle update meeting ends --> 
-
+</div>
+<!-- Modal to handle update meeting ends -->
 
 <!-------------------------------------------------------->
 <ng-template #modalContent let-close="close">
   <div class="modal-header">
-    <h5 class="modal-title">Meeting Details {{ modalData?.event.userName}}</h5>
+    <h5 class="modal-title">Meeting Details {{ modalData?.event.userName }}</h5>
     <button type="button" class="close" (click)="close()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-      <div class="parent">
-          <div class="form">
-              <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label">Subject:</label>
-                    <div class="col-sm-6 mt">{{ modalData?.event.subject }}               
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Description:</label>
-                    <div class="col-sm-6 mt">{{ modalData?.event.description }}</div>
-                  </div>
-                  <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">StartTime:</label>
-                        <div class="col-sm-6 mt">{{ modalData?.event.start | date:'medium'}}</div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label">EndTime:</label>
-                          <div class="col-sm-6 mt">{{ modalData?.event.end | date:'medium'}}</div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Location:</label>
-                            <div class="col-sm-6 mt">{{ modalData?.event.location }}</div>
-                          </div>
-                          <div class="form-group row">
-                              <label for="inputEmail3" class="col-sm-2 col-form-label">Created by:</label>
-                              <div class="col-sm-6 mt">{{ modalData?.event.adminName }}</div>
-                            </div>
-                          </div>
-                          
-                          <div class="col-md-4 btn btn-info btn-sm custom-btn update-btn" (click)="getMeetingOnClick()" data-toggle="modal" 
-                          data-target="#myModalUpdate">Update</div>
-                          <div class="col-md-4  btn btn-danger btn-sm custom-btn delete-btn" (click)="showModal()" data-toggle="modal" 
-                          data-target="#myModal">Delete</div>
-                        
-        </div> 
+    <div class="parent">
+      <div class="form">
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label"
+            >Subject:</label
+          >
+          <div class="col-sm-6 mt">{{ modalData?.event.subject }}</div>
+        </div>
+        <div class="form-group row">
+          <label for="inputPassword3" class="col-sm-2 col-form-label"
+            >Description:</label
+          >
+          <div class="col-sm-6 mt">{{ modalData?.event.description }}</div>
+        </div>
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label"
+            >StartTime:</label
+          >
+          <div class="col-sm-6 mt">
+            {{ modalData?.event.start | date: "medium" }}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label"
+            >EndTime:</label
+          >
+          <div class="col-sm-6 mt">
+            {{ modalData?.event.end | date: "medium" }}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label"
+            >Location:</label
+          >
+          <div class="col-sm-6 mt">{{ modalData?.event.location }}</div>
+        </div>
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label"
+            >Created by:</label
+          >
+          <div class="col-sm-6 mt">{{ modalData?.event.adminName }}</div>
+        </div>
+      </div>
+
+      <div
+        class="col-md-4 btn btn-info btn-sm custom-btn update-btn"
+        (click)="getMeetingOnClick()"
+        data-toggle="modal"
+        data-target="#myModalUpdate"
+      >
+        Update
+      </div>
+      <div
+        class="col-md-4  btn btn-danger btn-sm custom-btn delete-btn"
+        (click)="deleteEvent(modalData?.event)"
+        data-toggle="modal"
+        data-target="#myModal"
+      >
+        Delete
+      </div>
+    </div>
   </div>
   <!-------------------------------------------------------->
-  
 </ng-template>
 
 <!--Modal alert-->
 <ng-template #modalReminder let-close="close">
-    <div class="modal-header">
-      <h6 class="modal-title">Meeting Reminder</h6>
-      <button type="button" class="close" (click)="close()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <h6 class="card-title">Hurry Up!! Your meeting <span><i> {{modalData?.event.meetingTopic}} </i></span> is about to start.</h6>
-    </div>
-  
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-success" (click)="modalData?.event.remindMe=true;gentleReminder=true;close()">Snooze</button>
-      <button type="button" class="btn btn-outline-secondary" (click)="modalData?.event.remindMe=false;gentleReminder=true;close()">Dismiss</button>
-    </div>
-  </ng-template>
+  <div class="modal-header">
+    <h6 class="modal-title">Meeting Reminder</h6>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="card-title">
+      Hurry Up!! Your meeting
+      <span
+        ><i> {{ modalData?.event.meetingTopic }} </i></span
+      >
+      is about to start.
+    </h6>
+  </div>
 
-  <!--modal-->
-  <ng-template #modalDeleteMeeting let-close="close">
-      <div class="modal-header">
-        <h5 class="modal-title">Delete Meeting</h5>
-        <button type="button" class="close" (click)="close()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h6 class="card-title">Are you sure you want to delete the meeting?</h6>
-        <h4 class="card-title">{{modalData?.event.meetingSubject}}</h4>
-      </div>
-    
-      <div class="modal-footer">
-        <button type="button" class="btn btn btn-danger" (click)="deleteEvent(modalData?.event);close()">Delete</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="close()">Cancel</button>
-      </div>
-    </ng-template>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-success"
+      (click)="modalData?.event.remindMe = true; gentleReminder = true; close()"
+    >
+      Snooze
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="
+        modalData?.event.remindMe = false; gentleReminder = true; close()
+      "
+    >
+      Dismiss
+    </button>
+  </div>
+</ng-template>
+
 <!------------------------------------------------------------------------------------------>
